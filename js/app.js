@@ -3,6 +3,7 @@ import * as store from './store.js';
 import * as sync from './sync.js';
 import * as tracker from './tracker.js';
 import { seedDefaults, startReminders } from './tasks.js';
+import { openHelp } from './help.js';
 import { $, $$, html, debounce, todayISO, fmtClock, fmtKm } from './util.js';
 import { icon, toast, openSheet, hasOpenSheet, field, readForm } from './ui.js';
 
@@ -29,6 +30,8 @@ function buildChrome() {
     `<a href="#/${id}" data-route="${id}">${icon(ic, 24)}<span>${label}</span></a>`).join('');
   $('#logo').innerHTML = String(icon('paw', 26));
   $('#gear').innerHTML = String(icon('gear', 22));
+  $('#help').innerHTML = String(icon('info', 22));
+  $('#help').onclick = openHelp;
   updateBrand();
 }
 function updateBrand() { $('#brand-name').textContent = store.getMeta().name || 'Cipísek'; }
