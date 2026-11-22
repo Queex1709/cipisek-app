@@ -2,7 +2,7 @@
 
 Rodinný deník a průvodce pro pyrenejského horského psa. Běží celý v telefonu (PWA), funguje offline a volitelně se dá sdílet s rodinou přes Firebase.
 
-Žádný build, žádný backend, žádné npm. Je to čisté HTML, CSS a JavaScript (ES moduly).
+Žádný build, žádný backend, žádné npm. Je to čisté HTML, CSS a JavaScript (ES moduly). 
 
 ## Co umí
 
