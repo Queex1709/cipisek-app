@@ -122,11 +122,11 @@ h2.sec small { color: var(--ink-2); font-weight: 500; font-size: 0.85rem; }
 .tabbar {
   position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); z-index: 60;
   width: 100%; max-width: var(--maxw); height: calc(var(--nav-h) + var(--safe-b)); padding-bottom: var(--safe-b);
-  display: grid; grid-template-columns: repeat(5, 1fr);
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
   background: var(--surface); border-top: 1px solid var(--line);
 }
-.tabbar a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: var(--ink-2); font-size: 0.72rem; font-weight: 600; position: relative; }
-.tabbar a .ic { padding: 4px 16px; box-sizing: content-box; border-radius: 999px; width: 24px; height: 24px; transition: background-color 0.18s, color 0.18s; }
+.tabbar a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: var(--ink-2); font-size: 0.68rem; font-weight: 600; position: relative; min-width: 0; }
+.tabbar a .ic { padding: 4px 10px; box-sizing: content-box; border-radius: 999px; width: 24px; height: 24px; transition: background-color 0.18s, color 0.18s; }
 .tabbar a.on { color: var(--primary); }
 .tabbar a.on .ic { background: var(--primary-soft); }
 
