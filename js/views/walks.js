@@ -60,6 +60,10 @@ let onResize = null;
 
 export async function render(r) {
   root = r;
+  // zkratka z plochy: #/prochazky?q=start spustí nahrávání, q=stop ho ukončí
+  const q = new URLSearchParams(location.hash.split('?')[1] || '').get('q');
+  if (q) history.replaceState(null, '', location.pathname + location.search + '#/prochazky');
+  if (q === 'start') mode = 'rec';
   mode = tracker.isActive() ? 'rec' : mode;
   root.innerHTML = String(html`
     <header class="page-head"><h1>Procházky</h1></header>
@@ -91,6 +95,8 @@ export async function render(r) {
   }
   if (!root) return;
   initMap();
+  if (q === 'start' && !tracker.isActive()) startRec();
+  else if (q === 'stop' && tracker.isActive()) stopRec();
 }
 
 export function refresh() {

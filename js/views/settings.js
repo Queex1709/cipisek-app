@@ -205,7 +205,8 @@ function drawInstall() {
       : window.__installEvt ? html`<p class="muted small">Přidej si Cipíska na plochu, otevře se na celou obrazovku a funguje i bez internetu.</p>
           <button class="btn primary block" data-install>${icon('download', 18)} Nainstalovat aplikaci</button>`
       : ios ? html`<p class="muted">V Safari klepni na <b>Sdílet</b> a pak <b>Přidat na plochu</b>.</p>`
-      : html`<p class="muted">V Chrome otevři menu ⋮ a zvol <b>Instalovat aplikaci</b> (nebo <b>Přidat na plochu</b>). Instalace funguje jen přes https.</p>`}`);
+      : html`<p class="muted">V Chrome otevři menu ⋮ a zvol <b>Instalovat aplikaci</b> (nebo <b>Přidat na plochu</b>). Instalace funguje jen přes https.</p>`}
+    <p class="muted small"><b>Zkratky na ploše:</b> na Androidu podrž prst na ikoně Cipíska. Objeví se „Čůral venku“, „Nehoda“, „Začít procházku“ a „Přidat fotku a váhu“. Každou z nich můžeš přetáhnout na plochu jako samostatnou ikonu, i vedle widgetu s počasím.</p>`);
 }
 
 // ---------- záloha ----------
