@@ -622,3 +622,16 @@ input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; border-radius
 .tox { display: flex; flex-direction: column; gap: 6px; }
 .tox li { display: flex; gap: 10px; align-items: flex-start; }
 a.btn { text-decoration: none; }
+
+/* ---------- slevy ---------- */
+.deals { display: flex; flex-direction: column; }
+.deal { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.deal:first-child { border-top: 0; }
+.deal-t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.deal-t small { color: var(--ink-2); font-size: 0.82rem; }
+.deal-t .deal-v { color: var(--primary); font-weight: 600; }
+.deal-p { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.deal-p b { font-size: 1.1rem; white-space: nowrap; }
+.deal-p s { color: var(--ink-2); font-size: 0.82rem; }
+.late { color: var(--bad); }
+.warn { background: var(--warn-soft); color: var(--warn-ink); padding: 10px 12px; border-radius: var(--r-ctl); font-size: 0.9rem; }

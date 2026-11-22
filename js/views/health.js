@@ -6,7 +6,6 @@ import {
 import { icon, toast, openSheet, confirmDialog, field, textarea, select, readForm } from '../ui.js';
 import { KIND, vetCalendar } from '../data.js';
 import { nextVet } from '../domain.js';
-import * as feedtab from './feedtab.js';
 import * as aidtab from './aidtab.js';
 import { openVetCard } from '../vetcard.js';
 
@@ -16,10 +15,9 @@ let tab = 'vet';
 export function render(r) {
   root = r;
   const q = new URLSearchParams(location.hash.split('?')[1] || '').get('t');
-  if (q === 'krmeni') tab = 'feed';
+  if (q === 'krmeni') { location.replace('#/jidlo'); return; }
   if (q === 'pomoc') tab = 'aid';
   root.onclick = onClick;
-  root.onsubmit = (e) => { if (tab === 'feed') feedtab.handleSubmit(e, draw); };
   draw();
 }
 export const refresh = () => root && draw();
@@ -41,10 +39,9 @@ function draw() {
     <header class="page-head"><h1>Zdraví</h1></header>
     <div class="seg" role="tablist">
       <button role="tab" class="${tab === 'vet' ? 'on' : ''}" aria-selected="${tab === 'vet'}" data-tab="vet">Veterina</button>
-      <button role="tab" class="${tab === 'feed' ? 'on' : ''}" aria-selected="${tab === 'feed'}" data-tab="feed">Krmení</button>
       <button role="tab" class="${tab === 'aid' ? 'on' : ''}" aria-selected="${tab === 'aid'}" data-tab="aid">První pomoc</button>
     </div>
-    ${tab === 'aid' ? aidtab.renderHtml() : tab === 'feed' ? feedtab.renderHtml() : html`
+    ${tab === 'aid' ? aidtab.renderHtml() : html`
     ${next ? countdown(next, t) : html`<section class="card countdown empty-cd"><b>Žádný termín</b><p class="muted">Naplánuj další očkování, odčervení nebo kontrolu.</p></section>`}
 
     <button class="btn primary block" data-add>${icon('plus', 20)} Přidat záznam nebo termín</button>
@@ -107,7 +104,6 @@ function onClick(e) {
   const t = e.target;
   let el;
   if ((el = t.closest('[data-tab]'))) { tab = el.dataset.tab; draw(); return; }
-  if (tab === 'feed' && feedtab.handleClick(e, draw)) return;
   if (t.closest('[data-vetcard]')) return openVetCard();
   if (t.closest('[data-add]')) return entrySheet(null, { status: 'planned' });
   if ((el = t.closest('[data-done]'))) {

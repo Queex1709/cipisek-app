@@ -11,12 +11,13 @@ const ROUTES = {
   prochazky: () => import('./views/walks.js'),
   vychova: () => import('./views/training.js'),
   rust: () => import('./views/growth.js'),
+  jidlo: () => import('./views/food.js'),
   zdravi: () => import('./views/health.js'),
   nastaveni: () => import('./views/settings.js'),
 };
 const NAV = [
   ['dnes', 'Dnes', 'home'], ['prochazky', 'Procházky', 'map'], ['vychova', 'Výchova', 'award'],
-  ['rust', 'Růst', 'camera'], ['zdravi', 'Zdraví', 'heart'],
+  ['jidlo', 'Jídlo', 'bowl'], ['rust', 'Růst', 'camera'], ['zdravi', 'Zdraví', 'heart'],
 ];
 
 let current = null;

@@ -109,7 +109,7 @@ export function taskSheet(existing, preset, redraw) {
     body: html`<form class="form" id="tf">
       <div class="row-emoji">${field({ label: 'Název', name: 'title', value: b.title, attrs: 'required maxlength="60" placeholder="např. Výživa kloubů"' })}
         ${field({ label: 'Ikona', name: 'emoji', value: b.emoji, attrs: 'maxlength="4"' })}</div>
-      ${auto ? html`<input type="hidden" name="dose" value="auto"><p class="muted small">Porci na jedno krmení počítá kalkulačka v záložce Zdraví → Krmení.</p>`
+      ${auto ? html`<input type="hidden" name="dose" value="auto"><p class="muted small">Porci na jedno krmení počítá kalkulačka v záložce Jídlo → Porce.</p>`
              : field({ label: 'Dávka', name: 'dose', value: b.dose, attrs: 'maxlength="60" placeholder="např. 2 tablety"', hint: 'Řiď se obalem přípravku nebo radou veterináře.' })}
       <div class="field"><span>Časy</span><div id="times">${(b.times?.length ? b.times : ['08:00']).map((t) => timeRow(t))}</div>
         <button type="button" class="btn small ghost" data-add-time>${icon('plus', 16)} Přidat čas</button></div>
