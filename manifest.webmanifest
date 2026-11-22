@@ -18,6 +18,8 @@
     { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
+    { "name": "Venku čůral", "short_name": "Čůral venku", "url": "./#/dnes?q=pee", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Nehoda doma", "short_name": "Nehoda", "url": "./#/dnes?q=accident", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Zapsat událost", "short_name": "Dnes", "url": "./#/dnes", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Nová procházka", "short_name": "Procházka", "url": "./#/prochazky", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Přidat fotku a váhu", "short_name": "Růst", "url": "./#/rust", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }

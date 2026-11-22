@@ -1,15 +1,17 @@
 /* sw.js – service worker: aplikace funguje offline.
    Strategie: stejný původ = „cache first + obnova na pozadí“, vše ostatní (mapové dlaždice,
    routing, Firebase) jde přímo na síť. Při změně souborů ZVYŠ VERSION, ať si zařízení stáhnou novou verzi. */
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = `cipisek-${VERSION}`;
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest',
   'css/style.css', 'css/fonts.css', 'fonts/bricolage-latin.woff2', 'fonts/bricolage-latin-ext.woff2',
   'js/app.js', 'js/util.js', 'js/store.js', 'js/photodb.js', 'js/domain.js', 'js/ui.js',
-  'js/data.js', 'js/tracker.js', 'js/sync.js',
+  'js/data.js', 'js/tracker.js', 'js/sync.js', 'js/tasks.js', 'js/feeding.js', 'js/insights.js',
+  'js/cards.js', 'js/vetcard.js', 'js/photopick.js', 'js/shareimg.js',
   'js/views/today.js', 'js/views/walks.js', 'js/views/training.js',
   'js/views/growth.js', 'js/views/health.js', 'js/views/settings.js',
+  'js/views/feedtab.js', 'js/views/milestones.js',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'vendor/leaflet/leaflet.js', 'vendor/leaflet/leaflet.css',
   'vendor/leaflet/images/layers.png', 'vendor/leaflet/images/layers-2x.png',
@@ -29,6 +31,15 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('message', (e) => { if (e.data === 'SKIP_WAITING') self.skipWaiting(); });
+
+// klepnutí na upozornění otevře aplikaci
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+    for (const c of list) if ('focus' in c) return c.focus();
+    return self.clients.openWindow('./#/dnes');
+  }));
+});
 
 self.addEventListener('fetch', (e) => {
   const req = e.request;

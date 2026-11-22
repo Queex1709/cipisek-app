@@ -146,3 +146,11 @@ Datový model je záměrně připravený na databázi: každý záznam má `id`,
 Rady k výchově, zdraví a socializaci jsou obecné a orientační. Termíny očkování a odčervení určuje veterinář. Křivka váhy je jen střed z veřejných tabulek, každý pes roste jinak.
 
 Zdroje obsahu: schéma očkování (Royal Canin CZ), povinné čipování a Centrální evidence psů (finance.cz, muj-pravnik.cz, MZe), referenční váhy pyrenejského horského psa (belpatt.fr).
+
+## Novinky ve verzi 2
+
+- **Deník dne** (Růst → Deník a karta na Dnes): s čím jsme začali, co se naučil, co se povedlo, co pokazil, co jedl, poznámky a až 6 fotek ke dni. Přehled „Co se učí a od kdy“ se bere z tréninků ve Výchově.
+- **Úkoly a upozornění** (např. 2 tablety na klouby denně): odškrtnutí na Dnes, upozornění při otevřené aplikaci; pro zavřenou aplikaci stáhni úkol do kalendáře (.ics s alarmem), webová aplikace na pozadí běžet nemůže.
+- **Krmení** (Zdraví → Krmení a doplňky): kalkulačka denní porce z váhy, věku a kcal/kg krmiva. Je to odhad, řiď se obalem a veterinářem. Dávku doplňků určuje obal nebo veterinář.
+- **Kde je pes**: ruční stav a odkazy na trackery (Tractive, AirTag, SmartTag…). Živá mapa se do aplikace vložit nedá, otevře se stránka výrobce.
+- Chytré časy venčení, karta pro veterináře (tisk/sdílení), milníky, sdílení fotky s věkem, světlý/tmavý vzhled, připomenutí zálohy, zkratky na ploše.

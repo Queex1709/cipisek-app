@@ -10,6 +10,8 @@
 import * as store from './store.js';
 import * as photodb from './photodb.js';
 
+const PHOTO_COLS = ['growth', 'milestones', 'days'];   // kolekce se záznamy s fotkou
+const photoIds = (r) => (r.photos?.length ? r.photos : r.hasPhoto ? [r.id] : []);
 let db = null, famRef = null, unsub = null, unsubStore = null;
 let state = { status: 'off', msg: '' };
 const listeners = new Set();
@@ -102,9 +104,9 @@ function applyRemote(d) {
   if (!d?.rec) return;
   if (d.col === 'meta') { store.mergeRemoteMeta(d.rec); return; }
   const changed = store.mergeRemote(d.col, d.rec);
-  if (!changed || d.col !== 'growth') return;
-  if (d.rec.deletedAt) photodb.removePhoto(d.rec.id).catch(() => {});
-  else if (d.rec.hasPhoto) ensurePhoto(d.rec.id);
+  if (!changed || !PHOTO_COLS.includes(d.col)) return;
+  if (d.rec.deletedAt) photoIds(d.rec).forEach((p) => photodb.removePhoto(p).catch(() => {}));
+  else photoIds(d.rec).forEach((p) => ensurePhoto(p));
 }
 
 /** První spojení: nahraje všechno, co je lokálně novější nebo na serveru chybí. */
@@ -124,8 +126,10 @@ async function reconcile(snap) {
     writes.slice(i, i + 400).forEach(([col, rec]) => batch.set(famRef.collection('records').doc(`${col}__${rec.id}`), recDoc(col, rec)));
     await batch.commit();
   }
-  for (const g of store.list('growth')) {
-    if (g.hasPhoto) { pushPhoto(g.id).catch(() => {}); ensurePhoto(g.id); }
+  for (const col of PHOTO_COLS) {
+    for (const g of store.list(col)) {
+      for (const p of photoIds(g)) { pushPhoto(p).catch(() => {}); ensurePhoto(p); }
+    }
   }
 }
 

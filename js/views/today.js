@@ -2,12 +2,14 @@
 import * as store from '../store.js';
 import {
   html, $, toISO, todayISO, addDaysISO, parseISO, ageParts, ageDisplay, fmtDate, fmtTime, timeInput,
-  fmtKg, relDay, nDays, nWeeks,
+  fmtKg, relDay, nDays, nWeeks, fmtKm,
 } from '../util.js';
 import { icon, toast, openSheet, confirmDialog, field, textarea, readForm, miniBars } from '../ui.js';
 import { QUICK, QUICK_BY, KIND, phaseFor, TIPS } from '../data.js';
 import { weightSeries, nextVet } from '../domain.js';
 import { photoUrl } from '../photodb.js';
+import * as cards from '../cards.js';
+import * as days from './days.js';
 
 let root = null;
 
@@ -15,6 +17,15 @@ export function render(r) {
   root = r;
   root.onclick = onClick;
   draw();
+  runShortcut();
+}
+
+/** Zkratka z ikony na ploše: #/dnes?q=pee zapíše událost a odkaz uklidí. */
+function runShortcut() {
+  const q = new URLSearchParams(location.hash.split('?')[1] || '').get('q');
+  if (!q) return;
+  history.replaceState(null, '', location.pathname + location.search + '#/dnes');
+  if (QUICK_BY[q] && q !== 'note') quickLog(q);
 }
 export const refresh = () => root && draw();
 export function destroy() { if (root) root.onclick = null; root = null; }
@@ -48,6 +59,7 @@ function draw() {
     });
   }
   const weekHasData = weekRows.some((r) => r.good + r.bad > 0);
+  const weekKm = store.list('walks').filter((w) => w.date >= addDaysISO(t, -6)).reduce((a, w) => a + (w.meters || 0), 0);
 
   const socialLeft = age.totalDays >= 0 && age.totalDays < 112 ? Math.max(1, Math.round((112 - age.totalDays) / 7)) : null;
   const nv = nextVet();
@@ -69,12 +81,17 @@ function draw() {
         <strong>Okno socializace se zavírá</strong>
         <span>Zhruba ${nWeeks(socialLeft)} do 16. týdne věku. Odškrtávej, co už Cipísek zažil.</span>${icon('chev', 18)}</a>` : ''}
 
+    ${cards.backupNotice()}
+
     <section class="card" aria-labelledby="h-quick">
       <h2 id="h-quick">Rychlý zápis</h2>
       <div class="quick">
         ${QUICK.map((q) => html`<button class="q ${q.good ? 'good' : q.bad ? 'bad' : ''}" data-q="${q.type}"><span class="e" aria-hidden="true">${q.emoji}</span><span>${q.label}</span></button>`)}
       </div>
     </section>
+
+    ${cards.tasksCard()}
+    ${days.todayCard()}
 
     <section class="card" aria-labelledby="h-today">
       <h2 id="h-today">Dnes</h2>
@@ -83,12 +100,16 @@ function draw() {
         <span class="chip ${bad ? 'bad' : ''}">Nehody ${bad}×</span>
         <span class="chip">Jídlo ${count('meal')}×</span>
         ${good + bad > 0 ? html`<span class="chip strong">Čistota ${Math.round((good / (good + bad)) * 100)} %</span>` : ''}
+        ${weekKm > 0 ? html`<span class="chip">Týden venku ${fmtKm(weekKm)}</span>` : ''}
       </div>
       ${events.length ? html`<ul class="timeline">${events.map((e) => {
         const q = QUICK_BY[e.type] || QUICK_BY.note;
         return html`<li><button class="tl" data-ev="${e.id}"><span class="tl-time">${fmtTime(e.ts)}</span><span class="e" aria-hidden="true">${q.emoji}</span><span class="tl-text"><b>${q.label}</b>${e.note ? html`<small>${e.note}</small>` : ''}</span>${e.by ? html`<span class="tl-by">${e.by}</span>` : ''}</button></li>`;
       })}</ul>` : html`<p class="empty">Zatím nic. Klepni nahoře na to, co se právě stalo.</p>`}
     </section>
+
+    ${cards.pottyCard()}
+    ${cards.whereCard()}
 
     ${weekHasData ? html`<section class="card"><h2>Čistota za týden</h2>${miniBars(weekRows)}
       <p class="legend"><i class="dot good"></i>venku <i class="dot bad"></i>nehoda doma</p></section>` : ''}
@@ -128,6 +149,8 @@ async function setAvatar() {
 
 // ---------- události ----------
 function onClick(e) {
+  if (cards.handleClick(e, draw)) return;
+  if (days.handleClick(e, draw)) return;
   const q = e.target.closest('[data-q]');
   if (q) return quickLog(q.dataset.q);
   const ev = e.target.closest('[data-ev]');

@@ -2,6 +2,7 @@
 import * as store from './store.js';
 import * as sync from './sync.js';
 import * as tracker from './tracker.js';
+import { seedDefaults, startReminders } from './tasks.js';
 import { $, $$, html, debounce, todayISO, fmtClock, fmtKm } from './util.js';
 import { icon, toast, openSheet, hasOpenSheet, field, readForm } from './ui.js';
 
@@ -61,6 +62,13 @@ store.subscribe((ev) => {
   if (ev.origin === 'remote' || ev.type === 'import' || ev.type === 'reset') scheduleRefresh();
 });
 addEventListener('cipisek:photo', scheduleRefresh);
+addEventListener('cipisek:tasks', scheduleRefresh);
+
+// ---------- Vzhled ----------
+function applyTheme() {
+  const t = store.getSettings().theme;
+  document.documentElement.dataset.theme = t === 'light' || t === 'dark' ? t : '';
+}
 
 // ---------- Indikátory v horní liště ----------
 function initIndicators() {
@@ -157,6 +165,8 @@ function initPwa() {
 }
 
 // ---------- Start ----------
+applyTheme();
+seedDefaults();
 buildChrome();
 initIndicators();
 initPwa();
@@ -165,3 +175,4 @@ addEventListener('hashchange', route);
 await route();
 if (!joining) welcome();
 sync.start();
+startReminders();

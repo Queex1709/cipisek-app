@@ -4,7 +4,8 @@
    {
      schema: 1,
      meta:  { id:'dog', name, birthDate, sex, breed, updatedAt },
-     cols:  { walks:{id:rec}, skills:{…}, logs:{…}, growth:{…}, vet:{…}, diary:{…}, social:{…} }
+     cols:  { walks, skills, logs, growth, vet, diary, social,   // každá {id: záznam}
+              tasks, tasklogs, milestones, devices, plan }
    }
    Každý záznam má id, createdAt, updatedAt, by (kdo zapsal) a při smazání deletedAt
    (tzv. „náhrobek“, aby se smazání dalo synchronizovat). Díky tomu jde později
@@ -14,16 +15,17 @@
    a nesynchronizuje se. Fotky (velká data) jsou v IndexedDB – viz photodb.js. */
 import { uid } from './util.js';
 
-export const COLS = ['walks', 'skills', 'logs', 'growth', 'vet', 'diary', 'social'];
+export const COLS = ['walks', 'skills', 'logs', 'growth', 'vet', 'diary', 'social', 'tasks', 'tasklogs', 'milestones', 'devices', 'plan', 'days'];
 const KEY = 'cipisek.v1';
 const SKEY = 'cipisek.settings.v1';
 
 const DEFAULT_META = {
   id: 'dog', name: 'Cipísek', birthDate: '2026-08-31', sex: 'm',
-  breed: 'Pyrenejský horský pes', updatedAt: 0,
+  breed: 'Pyrenejský horský pes', chip: '', notes: '', updatedAt: 0,
 };
 const DEFAULT_SETTINGS = {
   who: '', paceKmh: 3, mapLayer: 'sat-labels', showRef: true,
+  theme: 'auto', notifOn: false, lastBackup: 0,
   familyCode: '', firebaseConfig: null, syncOn: false, pushedPhotos: [],
 };
 

@@ -6,16 +6,22 @@ import {
 import { icon, toast, openSheet, confirmDialog, field, textarea, select, readForm } from '../ui.js';
 import { KIND, vetCalendar } from '../data.js';
 import { nextVet } from '../domain.js';
+import * as feedtab from './feedtab.js';
+import { openVetCard } from '../vetcard.js';
 
 let root = null;
+let tab = 'vet';
 
 export function render(r) {
   root = r;
+  const q = new URLSearchParams(location.hash.split('?')[1] || '').get('t');
+  if (q === 'krmeni') tab = 'feed';
   root.onclick = onClick;
+  root.onsubmit = (e) => { if (tab === 'feed') feedtab.handleSubmit(e, draw); };
   draw();
 }
 export const refresh = () => root && draw();
-export function destroy() { if (root) root.onclick = null; root = null; }
+export function destroy() { if (root) { root.onclick = null; root.onsubmit = null; } root = null; }
 
 const kindOf = (k) => KIND[k] || KIND.other;
 
@@ -31,7 +37,11 @@ function draw() {
 
   root.innerHTML = String(html`
     <header class="page-head"><h1>Zdraví</h1></header>
-
+    <div class="seg" role="tablist">
+      <button role="tab" class="${tab === 'vet' ? 'on' : ''}" aria-selected="${tab === 'vet'}" data-tab="vet">Veterina</button>
+      <button role="tab" class="${tab === 'feed' ? 'on' : ''}" aria-selected="${tab === 'feed'}" data-tab="feed">Krmení a doplňky</button>
+    </div>
+    ${tab === 'feed' ? feedtab.renderHtml() : html`
     ${next ? countdown(next, t) : html`<section class="card countdown empty-cd"><b>Žádný termín</b><p class="muted">Naplánuj další očkování, odčervení nebo kontrolu.</p></section>`}
 
     <button class="btn primary block" data-add>${icon('plus', 20)} Přidat záznam nebo termín</button>
@@ -47,7 +57,8 @@ function draw() {
         <span class="e" aria-hidden="true">${kindOf(v.kind).emoji}</span>
         <span class="htxt"><b>${v.title}</b><small>${fmtDate(v.date)}${v.weightKg ? ` · ${fmtKg(v.weightKg)}` : ''}${v.by ? ` · ${v.by}` : ''}</small>${v.note ? html`<small class="note">${v.note}</small>` : ''}</span>
         ${icon('chev', 16)}</button></li>`)}</ul>`
-      : html`<p class="empty">Tady se objeví proběhlé návštěvy, očkování a odčervení.</p>`}`);
+      : html`<p class="empty">Tady se objeví proběhlé návštěvy, očkování a odčervení.</p>`}
+    <button class="btn ghost block" data-vetcard>${icon('download', 20)} Karta pro veterináře</button>`}`);
 }
 
 function countdown(v, t) {
@@ -92,6 +103,9 @@ function calItem(c, rec) {
 function onClick(e) {
   const t = e.target;
   let el;
+  if ((el = t.closest('[data-tab]'))) { tab = el.dataset.tab; draw(); return; }
+  if (tab === 'feed' && feedtab.handleClick(e, draw)) return;
+  if (t.closest('[data-vetcard]')) return openVetCard();
   if (t.closest('[data-add]')) return entrySheet(null, { status: 'planned' });
   if ((el = t.closest('[data-done]'))) {
     const v = store.get('vet', el.dataset.done);

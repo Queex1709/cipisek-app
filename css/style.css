@@ -460,3 +460,136 @@ input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; border-radius
   .sheet { border-radius: 24px; max-height: 86dvh; }
   .sheet-full { height: 86dvh; }
 }
+
+/* ---------- ruční přepnutí vzhledu (Nastavení → Vzhled) ---------- */
+:root[data-theme="dark"] {
+  --bg: #0f171b;
+  --surface: #172228;
+  --surface-2: #213038;
+  --ink: #e6eef0;
+  --ink-2: #9db0b6;
+  --line: #2a3b43;
+  --primary: #5cc2a6;
+  --primary-ink: #08231c;
+  --primary-soft: #1c3a34;
+  --accent: #e0a24f;
+  --accent-soft: #3a2d17;
+  --good: #55c58a;
+  --good-soft: #17352a;
+  --bad: #ef7a62;
+  --bad-soft: #3d201a;
+  --warn-soft: #3a2d17;
+  --warn-ink: #f0c987;
+  --scrim: rgba(0, 0, 0, 0.62);
+  --tone-a: #9db0b6; --tone-b: #e0b25f; --tone-c: #78c98d; --tone-d: #55c58a; --tone-e: #5cc2a6;
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+
+/* ---------- úkoly a upozornění (Dnes) ---------- */
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.card-head h2 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+.slots { display: flex; flex-direction: column; gap: 8px; }
+.slot { width: 100%; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 12px; border-radius: var(--r-ctl); background: var(--surface-2); text-align: left; border: 2px solid transparent; }
+.slot:active { transform: scale(0.99); }
+.chk-box { flex: none; width: 28px; height: 28px; border-radius: 9px; border: 2px solid var(--ink-2); display: grid; place-items: center; color: var(--primary-ink); }
+.slot-time { flex: none; width: 46px; font-variant-numeric: tabular-nums; font-weight: 700; }
+.slot-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.slot-text small { color: var(--ink-2); font-size: 0.82rem; }
+.slot.s-due { border-color: var(--primary); background: var(--primary-soft); }
+.slot.s-late { border-color: var(--bad); background: var(--bad-soft); }
+.slot.s-late .slot-time { color: var(--bad); }
+.slot.s-done { opacity: 0.75; }
+.slot.s-done .chk-box { background: var(--good); border-color: var(--good); }
+.slot.s-done .slot-text b { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.slot.s-missed { opacity: 0.6; }
+.trow { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.trow input { flex: 1; }
+.row-emoji { display: grid; grid-template-columns: 1fr 76px; gap: 10px; align-items: end; }
+.days { display: flex; gap: 6px; flex-wrap: wrap; }
+.dchip { position: relative; }
+.dchip input { position: absolute; opacity: 0; pointer-events: none; }
+.dchip span { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; height: 40px; padding: 0 8px; border-radius: 12px; background: var(--surface-2); color: var(--ink-2); font-weight: 650; font-size: 0.88rem; cursor: pointer; }
+.dchip input:checked + span { background: var(--primary); color: var(--primary-ink); }
+.dchip input:focus-visible + span { outline: 3px solid var(--primary); outline-offset: 2px; }
+
+/* ---------- kde je pes, trackery ---------- */
+.where-now { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border-radius: var(--r-ctl); background: var(--primary-soft); text-align: left; color: var(--ink); }
+.where-now > span:nth-child(2) { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.where-now small { color: var(--ink-2); font-size: 0.82rem; }
+.where-pin { flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--primary); color: var(--primary-ink); display: grid; place-items: center; }
+.devs { display: flex; flex-direction: column; gap: 8px; }
+.dev { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+.dev .e { font-size: 1.5rem; }
+.dev > div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.dev small { color: var(--ink-2); font-size: 0.82rem; overflow-wrap: anywhere; }
+.outside { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: var(--r-ctl); background: var(--primary-soft); }
+.outside b { font-size: 1.05rem; }
+.outside span { color: var(--ink-2); font-size: 0.88rem; }
+.outside.late { background: var(--warn-soft); }
+.outside.late b { color: var(--warn-ink); }
+
+/* ---------- krmení ---------- */
+.feed-result { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.feed-result > div { display: flex; flex-direction: column; padding: 14px; border-radius: var(--r-ctl); background: var(--primary-soft); }
+.fr-main b { font-size: 1.9rem; font-weight: 780; letter-spacing: -0.03em; line-height: 1.1; color: var(--primary); }
+.fr-sub b { font-size: 1.2rem; font-weight: 720; }
+.feed-result span { color: var(--ink-2); font-size: 0.85rem; }
+
+/* ---------- milníky ---------- */
+.miles { display: flex; flex-direction: column; gap: 8px; }
+.mile { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px; border-radius: var(--r-ctl); background: var(--surface); border: 1px solid var(--line); text-align: left; }
+.mile img, .mile-ic { flex: none; width: 56px; height: 56px; border-radius: 12px; object-fit: cover; }
+.mile-ic { display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.mile-t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.mile-t small { color: var(--ink-2); font-size: 0.82rem; }
+.mile-t small.note { overflow-wrap: anywhere; }
+
+/* ---------- denní deník ---------- */
+.lbl { font-size: 0.85rem; font-weight: 650; color: var(--ink-2); display: block; margin-bottom: 6px; }
+.learned { display: flex; flex-direction: column; gap: 8px; }
+.learned li { display: flex; gap: 10px; align-items: flex-start; }
+.learned .e { font-size: 1.3rem; line-height: 1.3; }
+.learned span:last-child { display: flex; flex-direction: column; min-width: 0; }
+.learned small { color: var(--ink-2); font-size: 0.82rem; }
+.dlist { display: flex; flex-direction: column; gap: 10px; }
+.day { width: 100%; display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: var(--r-card); background: var(--surface); border: 1px solid var(--line); text-align: left; }
+.day-h { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.day-h small { color: var(--ink-2); font-size: 0.82rem; }
+.day-ph { display: flex; gap: 6px; position: relative; }
+.day-ph img { width: calc((100% - 12px) / 3); aspect-ratio: 1; object-fit: cover; border-radius: 12px; background: var(--surface-2); max-width: 120px; }
+.day-ph i { align-self: center; font-style: normal; color: var(--ink-2); font-weight: 650; }
+.drow { display: flex; gap: 8px; font-size: 0.93rem; overflow-wrap: anywhere; }
+.drow .e { flex: none; }
+.daycard { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; }
+.daycard > div { min-width: 0; }
+.daycard .muted { font-size: 0.88rem; }
+.dphotos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.dphotos:empty { display: none; }
+.dph { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: var(--surface-2); }
+.dph img { width: 100%; height: 100%; object-fit: cover; }
+.dph-x { position: absolute; top: 4px; right: 4px; width: 28px; height: 28px; border-radius: 50%; background: rgba(0, 0, 0, 0.62); color: #fff; font-size: 1.1rem; line-height: 1; display: grid; place-items: center; }
+
+/* ---------- karta pro veterináře ---------- */
+.vc { background: #fff; color: #111; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 0.92rem; }
+.vc h3 { font-size: 1.5rem; letter-spacing: -0.02em; }
+.vc h4 { margin: 6px 0 0; font-size: 0.95rem; }
+.vc-head p { color: #444; }
+.vc-grid { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; }
+.vc-grid dt { color: #555; }
+.vc-grid dd { margin: 0; font-weight: 600; }
+.vc-box { border: 1px solid #bbb; border-radius: 10px; padding: 8px 10px; }
+.vc-tab { width: 100%; border-collapse: collapse; }
+.vc-tab td { padding: 5px 4px; border-bottom: 1px solid #ddd; vertical-align: top; }
+.vc-tab td.r { text-align: right; white-space: nowrap; }
+.vc-tab small { display: block; color: #555; }
+.vc-foot { color: #666; font-size: 0.78rem; }
+
+@media print {
+  body { background: #fff; }
+  #app, #toasts, .no-print, .sheet-head { display: none !important; }
+  .sheet-back { position: static !important; background: none !important; display: block !important; }
+  .sheet { position: static !important; max-height: none !important; box-shadow: none !important; transform: none !important; width: 100% !important; border-radius: 0 !important; }
+  .sheet-body { overflow: visible !important; padding: 0 !important; }
+  .vc { padding: 0; font-size: 11pt; }
+}

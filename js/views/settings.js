@@ -2,7 +2,8 @@
 import * as store from '../store.js';
 import * as sync from '../sync.js';
 import * as photodb from '../photodb.js';
-import { html, raw, $, todayISO, ageText, parseNum } from '../util.js';
+import { html, raw, $, todayISO, ageText, parseNum, fmtDate } from '../util.js';
+import { notificationsSupported, enableNotifications } from '../tasks.js';
 import { icon, toast, openSheet, confirmDialog, field, select, readForm } from '../ui.js';
 
 const APP_VERSION = '1.0.0';
@@ -58,8 +59,21 @@ function draw() {
         ${field({ label: 'Jméno', name: 'name', value: meta.name, attrs: 'required maxlength="40"' })}
         ${field({ label: 'Datum narození', name: 'birthDate', type: 'date', value: meta.birthDate, attrs: `required max="${todayISO()}"`, hint: `Dnes: ${ageText(meta.birthDate)}` })}
         ${select({ label: 'Pohlaví (jen pro orientační křivku váhy)', name: 'sex', value: meta.sex, options: [['m', 'Pes'], ['f', 'Fena']] })}
+        ${field({ label: 'Číslo čipu (volitelně)', name: 'chip', value: meta.chip || '', attrs: 'maxlength="20" inputmode="numeric" autocomplete="off"', hint: 'Objeví se na kartě pro veterináře.' })}
+        <label class="field"><span>Alergie a poznámky pro veterináře</span><textarea name="notes" rows="2" maxlength="300" placeholder="např. alergie na kuřecí maso">${meta.notes || ''}</textarea></label>
         <button class="btn primary block" type="submit">Uložit</button>
       </form>
+    </section>
+
+    <section class="card">
+      <h2>Vzhled a upozornění</h2>
+      <form class="form" data-form="look">
+        ${select({ label: 'Vzhled', name: 'theme', value: set.theme || 'auto', options: [['auto', 'Podle telefonu'], ['light', 'Světlý'], ['dark', 'Tmavý']] })}
+        <button class="btn primary block" type="submit">Uložit</button>
+      </form>
+      <p class="muted small">Upozornění na úkoly (prášky, krmení): ${!notificationsSupported() ? 'toto zařízení je nepodporuje.' : Notification.permission === 'granted' ? 'povolená. Ozvou se, když je aplikace otevřená nebo na pozadí.' : Notification.permission === 'denied' ? 'zakázaná. Povol je v nastavení prohlížeče.' : 'zatím nepovolená.'}
+        Když je aplikace úplně zavřená, hlídá úkoly budík z kalendáře (úkol → Budík do kalendáře).</p>
+      ${notificationsSupported() && Notification.permission === 'default' ? html`<button class="btn ghost" data-notif>${icon('cal', 18)} Povolit upozornění</button>` : ''}
     </section>
 
     <section class="card">
@@ -94,7 +108,7 @@ function draw() {
         <button class="btn ghost" data-import>${icon('upload', 18)} Nahrát zálohu</button>
       </div>
       <input type="file" id="fImport" accept="application/json,.json" hidden>
-      <p class="muted small" id="expStat"></p>
+      <p class="muted small" id="expStat">${set.lastBackup ? `Poslední záloha: ${fmtDate(new Date(set.lastBackup).toISOString().slice(0, 10))}.` : 'Zatím jsi žádnou nestáhl.'}</p>
     </section>
 
     <section class="card" id="installCard"></section>
@@ -209,6 +223,7 @@ async function exportData() {
     a.download = `cipisek-zaloha-${todayISO()}.json`;
     document.body.append(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    store.setSettings({ lastBackup: Date.now() });
     stat.textContent = `Hotovo: ${(blob.size / 1048576).toFixed(1).replace('.', ',')} MB, ${out.photos.length} fotek.`;
   } catch (e) {
     console.error(e);
@@ -252,6 +267,12 @@ async function onClick(e) {
     drawInstall();
     return;
   }
+  if (t.closest('[data-notif]')) {
+    const p = await enableNotifications();
+    toast(p === 'granted' ? 'Upozornění jsou zapnutá.' : 'Upozornění nejsou povolená.');
+    draw();
+    return;
+  }
   if (t.closest('[data-copy-rules]')) { await copyText(RULES); toast('Pravidla jsou zkopírovaná.'); return; }
   if (t.closest('[data-resync]')) { await sync.start(); toast('Připojuji znovu…'); return; }
   if (t.closest('[data-unshare]')) {
@@ -289,9 +310,14 @@ async function onSubmit(e) {
   const f = readForm(form);
   switch (form.dataset.form) {
     case 'dog':
-      store.setMeta({ name: f.name.trim() || 'Cipísek', birthDate: f.birthDate, sex: f.sex });
+      store.setMeta({ name: f.name.trim() || 'Cipísek', birthDate: f.birthDate, sex: f.sex, chip: f.chip.trim(), notes: f.notes.trim() });
       toast('Uloženo.');
       draw();
+      break;
+    case 'look':
+      store.setSettings({ theme: f.theme });
+      document.documentElement.dataset.theme = f.theme === 'auto' ? '' : f.theme;
+      toast('Uloženo.');
       break;
     case 'me':
       store.setSettings({ who: f.who.trim() });

@@ -87,8 +87,8 @@ export function ageText(birthISO, atISO) {
 }
 
 /** Věk rozdělený na velkou a malou část pro hero kartu. */
-export function ageDisplay(birthISO) {
-  const p = ageParts(birthISO);
+export function ageDisplay(birthISO, atISO) {
+  const p = ageParts(birthISO, atISO);
   if (p.neg) return { big: '—', small: '' };
   if (p.months < 1) return { big: nDays(p.days), small: '' };
   if (p.months < 12) return { big: nMonths(p.months), small: p.days ? `a ${nDays(p.days)}` : '' };
@@ -160,4 +160,40 @@ export function sample(pts, n) {
   const out = [];
   for (let i = 0; i < n; i++) out.push(pts[Math.round((i * (pts.length - 1)) / (n - 1))]);
   return out;
+}
+
+// ---------- Různé ----------
+export const DOW = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
+export const minutesOf = (hhmm) => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
+
+/** „před 5 min“, „před 3 h“, „včera“… */
+export function agoText(ts) {
+  const min = Math.round((Date.now() - ts) / 60000);
+  if (min < 1) return 'právě teď';
+  if (min < 60) return `před ${min} min`;
+  const h = Math.round(min / 60);
+  if (h < 24) return `před ${h} h`;
+  const d = Math.round(h / 24);
+  return d === 1 ? 'včera' : `před ${nDays(d)}`;
+}
+
+export function downloadBlob(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+export async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch { /* záloha níž */ }
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.append(ta); ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch { /* nic */ }
+  ta.remove();
+  return ok;
 }

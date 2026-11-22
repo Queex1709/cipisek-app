@@ -8,10 +8,14 @@ import {
 import { icon, toast, openSheet, confirmDialog, field, textarea, readForm, weightChart } from '../ui.js';
 import { weightSeries } from '../domain.js';
 import { REF_WEIGHT } from '../data.js';
-import { addMonthsISO } from '../util.js';
+import { addMonthsISO, ageDisplay } from '../util.js';
+import * as milestones from './milestones.js';
+import * as days from './days.js';
+import { ageImage, shareOrDownload } from '../shareimg.js';
 
 let root = null;
 let chartPts = [];
+let tab = 'gallery';
 
 export function render(r) {
   root = r;
@@ -48,6 +52,12 @@ function draw() {
 
   root.innerHTML = String(html`
     <header class="page-head"><h1>Růst</h1></header>
+    <div class="seg" role="tablist">
+      <button role="tab" class="${tab === 'gallery' ? 'on' : ''}" aria-selected="${tab === 'gallery'}" data-tab="gallery">Fotky a váha</button>
+      <button role="tab" class="${tab === 'miles' ? 'on' : ''}" aria-selected="${tab === 'miles'}" data-tab="miles">Milníky</button>
+      <button role="tab" class="${tab === 'days' ? 'on' : ''}" aria-selected="${tab === 'days'}" data-tab="days">Deník</button>
+    </div>
+    ${tab === 'days' ? days.renderHtml() : tab === 'miles' ? milestones.renderHtml() : html`
     <button class="btn primary block" data-add>${icon('camera', 20)} Přidat fotku nebo váhu</button>
 
     <section class="card" aria-labelledby="h-w">
@@ -69,7 +79,7 @@ function draw() {
         ${g.hasPhoto ? html`<img data-ph="${g.id}" alt="Fotka ${fmtDate(g.date)}">` : html`<span class="gph">${icon('scale', 26)}</span>`}
         <span class="gcap"><b>${g.weightKg ? fmtKg(g.weightKg) : ''}</b><small>${ageText(meta.birthDate, g.date)}</small></span>
       </button>`)}</div>`
-      : html`<p class="empty">Fotky se zobrazí tady. Přidej první a sleduj, jak ${meta.name} roste.</p>`}`);
+      : html`<p class="empty">Fotky se zobrazí tady. Přidej první a sleduj, jak ${meta.name} roste.</p>`}`}`);
 
   loadThumbs();
 }
@@ -88,6 +98,9 @@ async function loadThumbs() {
 function onClick(e) {
   const t = e.target;
   let el;
+  if ((el = t.closest('[data-tab]'))) { tab = el.dataset.tab; draw(); return; }
+  if (tab === 'miles' && milestones.handleClick(e, draw)) return;
+  if (tab === 'days' && days.handleClick(e, draw)) return;
   if (t.closest('[data-add]')) return entrySheet();
   if (t.closest('[data-compare]')) return compareSheet();
   if ((el = t.closest('[data-open]'))) return detailSheet(el.dataset.open);
@@ -208,6 +221,7 @@ function detailSheet(id) {
       <div class="chips"><span class="chip strong">${ageText(meta.birthDate, g.date)}</span>${g.weightKg ? html`<span class="chip">${fmtKg(g.weightKg)}</span>` : ''}</div>
       ${g.note ? html`<p class="walk-note">${g.note}</p>` : ''}
       ${g.by ? html`<p class="muted small">Zapsal(a): ${g.by}</p>` : ''}
+      ${g.hasPhoto ? html`<button class="btn ghost block" data-share>${icon('share', 18)} Sdílet s věkem</button>` : ''}
       <div class="btn-row"><button class="btn primary" data-edit>${icon('edit', 18)} Upravit</button><button class="btn danger-ghost" data-rm>${icon('trash', 18)} Smazat</button></div>`,
   });
   if (g.hasPhoto) {
@@ -218,6 +232,18 @@ function detailSheet(id) {
       else { i.replaceWith(Object.assign(document.createElement('p'), { className: 'empty', textContent: 'Fotka se do tohoto zařízení ještě nestáhla.' })); sync.ensurePhoto(id); }
     });
   }
+  const sh = s.$('[data-share]');
+  if (sh) sh.onclick = async () => {
+    sh.disabled = true;
+    try {
+      const p = await photodb.loadPhoto(id);
+      if (!p) { toast('Fotka se do tohoto zařízení ještě nestáhla.'); return; }
+      const a = ageDisplay(meta.birthDate, g.date);
+      const blob = await ageImage({ blob: p.img, name: meta.name, big: a.big, small: a.small, foot: `${fmtDate(g.date)}${g.weightKg ? ' · ' + fmtKg(g.weightKg) : ''}` });
+      await shareOrDownload(blob, `${meta.name}-${g.date}.jpg`, `${meta.name}, ${ageText(meta.birthDate, g.date)}`);
+    } catch (err) { console.error(err); toast('Obrázek se nepodařilo vytvořit.'); }
+    sh.disabled = false;
+  };
   s.$('[data-edit]').onclick = () => { s.close(); setTimeout(() => entrySheet(g), 260); };
   s.$('[data-rm]').onclick = async () => {
     if (await confirmDialog({ title: 'Smazat záznam?', text: 'Smaže se i fotka a váha.', ok: 'Smazat', danger: true })) { removeEntry(id); s.close(); }

@@ -221,3 +221,32 @@ export const REF_WEIGHT = {
   m: [[3, 17.65], [6, 32.45], [12, 48]],
   f: [[3, 13.1], [6, 24.4], [12, 34.2]],
 };
+
+// ---------- Předvolby úkolů (opakující se denně) ----------
+// days: dny v týdnu (0 = neděle … 6 = sobota); bez days = každý den. dose 'auto' = porce z kalkulačky krmení.
+export const TASK_PRESETS = [
+  { key: 'joints', id: 'preset_joints', emoji: '🦴', title: 'Výživa kloubů', kind: 'supplement', times: ['08:00'], dose: '2 tablety', note: 'Dávku a značku si ověř na obalu nebo u veterináře.' },
+  { key: 'meals', id: 'preset_meals', emoji: '🍽️', title: 'Krmení', kind: 'meal', times: ['07:30', '11:30', '15:30', '19:30'], dose: 'auto', note: 'Porci spočítá záložka Zdraví → Krmení.' },
+  { key: 'pill', emoji: '💊', title: 'Lék nebo tableta', kind: 'med', times: ['08:00'], dose: '1 tableta', note: '' },
+  { key: 'brush', emoji: '🪮', title: 'Česání srsti', kind: 'other', times: ['18:00'], days: [3, 6], dose: '', note: 'Hustá dvojitá srst, 1–2× týdně, v línání častěji.' },
+  { key: 'paws', emoji: '🐾', title: 'Kontrola tlapek a uší', kind: 'other', times: ['19:00'], days: [0], dose: '', note: '' },
+];
+export const TASK_KIND_LABEL = { supplement: 'Doplněk', meal: 'Krmení', med: 'Lék', other: 'Jiné' };
+
+// ---------- Milníky ----------
+export const MILESTONE_PRESETS = [
+  'Přišel domů', 'První noc beze slz', 'První procházka venku', 'První návštěva u veterináře', 'První jízda autem',
+  'První kamarád pes', 'První sníh', 'První koupání', 'Poprvé sám celou noc', 'Zvládl „sedni“', 'Zvládl přivolání',
+  'Nová nejtěžší váha', 'První výlet do hor',
+];
+
+// ---------- Trackery polohy ----------
+export const DEVICE_TYPES = [
+  { key: 'tractive', label: 'Tractive (GPS obojek)', emoji: '📡', url: 'https://my.tractive.com/' },
+  { key: 'airtag', label: 'Apple AirTag', emoji: '🏷️', url: 'https://www.icloud.com/find' },
+  { key: 'smarttag', label: 'Samsung SmartTag', emoji: '🏷️', url: 'https://smartthingsfind.samsung.com/' },
+  { key: 'google', label: 'Google Najít zařízení', emoji: '📍', url: 'https://www.google.com/android/find' },
+  { key: 'other', label: 'Jiný tracker', emoji: '📡', url: '' },
+];
+export const DEVICE_BY = Object.fromEntries(DEVICE_TYPES.map((d) => [d.key, d]));
+export const WHERE_OPTIONS = ['Doma', 'Na procházce', 'V autě', 'U veterináře', 'U kamaráda', 'U hlídání'];
