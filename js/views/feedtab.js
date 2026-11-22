@@ -7,6 +7,7 @@ import { TASK_PRESETS } from '../data.js';
 import { taskSheet } from '../cards.js';
 import { doseText } from '../tasks.js';
 
+const DEALS = [['🍗 Kuřecí maso', 'kuřecí maso'], ['🦃 Krůtí maso', 'krůtí maso'], ['🥩 Hovězí maso', 'hovězí maso'], ['🐟 Ryby', 'losos filety'], ['🍚 Rýže', 'rýže'], ['🥕 Mrkev', 'mrkev'], ['🥚 Vejce', 'vejce'], ['🐶 Granule pro štěňata', 'granule štěňata']];
 const MEAL_TIMES = { 4: ['07:30', '11:30', '15:30', '19:30'], 3: ['07:30', '13:00', '19:00'], 2: ['07:30', '18:30'] };
 
 export function renderHtml() {
@@ -58,6 +59,13 @@ export function renderHtml() {
         <li>Po jídle klid, žádné běhání ani divoké hry.</li>
       </ul>
       <p class="muted small">Zdroje: PetMD (výpočet energie), Royal Canin CZ (počet krmení), VCA Hospitals (velká a obří plemena).</p>
+    </section>
+
+    <section class="card" aria-labelledby="h-deals">
+      <h2 id="h-deals">Akce v obchodech</h2>
+      <p class="muted small">Klepnutí otevře Kupi.cz s aktuálními slevami z letáků. Aktualizují se tam samy, takže jsou vždy čerstvé.</p>
+      <div class="chips wrap">${DEALS.map(([label, q]) => html`<a class="chip btn-chip" target="_blank" rel="noopener" href="https://www.kupi.cz/hledej?f=${encodeURIComponent(q)}">${label}</a>`)}</div>
+      <p class="muted small">Maso jen jako doplněk ke granulím a jen vařené bez soli a koření, ne uzeniny. Syrové krmení nejdřív proberte s veterinářem. ${meta.notes ? `Pozor, v poznámkách máš: ${meta.notes}` : ''}</p>
     </section>
 
     <section class="card" aria-labelledby="h-joint">

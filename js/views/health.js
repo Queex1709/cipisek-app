@@ -7,6 +7,7 @@ import { icon, toast, openSheet, confirmDialog, field, textarea, select, readFor
 import { KIND, vetCalendar } from '../data.js';
 import { nextVet } from '../domain.js';
 import * as feedtab from './feedtab.js';
+import * as aidtab from './aidtab.js';
 import { openVetCard } from '../vetcard.js';
 
 let root = null;
@@ -16,6 +17,7 @@ export function render(r) {
   root = r;
   const q = new URLSearchParams(location.hash.split('?')[1] || '').get('t');
   if (q === 'krmeni') tab = 'feed';
+  if (q === 'pomoc') tab = 'aid';
   root.onclick = onClick;
   root.onsubmit = (e) => { if (tab === 'feed') feedtab.handleSubmit(e, draw); };
   draw();
@@ -39,9 +41,10 @@ function draw() {
     <header class="page-head"><h1>Zdraví</h1></header>
     <div class="seg" role="tablist">
       <button role="tab" class="${tab === 'vet' ? 'on' : ''}" aria-selected="${tab === 'vet'}" data-tab="vet">Veterina</button>
-      <button role="tab" class="${tab === 'feed' ? 'on' : ''}" aria-selected="${tab === 'feed'}" data-tab="feed">Krmení a doplňky</button>
+      <button role="tab" class="${tab === 'feed' ? 'on' : ''}" aria-selected="${tab === 'feed'}" data-tab="feed">Krmení</button>
+      <button role="tab" class="${tab === 'aid' ? 'on' : ''}" aria-selected="${tab === 'aid'}" data-tab="aid">První pomoc</button>
     </div>
-    ${tab === 'feed' ? feedtab.renderHtml() : html`
+    ${tab === 'aid' ? aidtab.renderHtml() : tab === 'feed' ? feedtab.renderHtml() : html`
     ${next ? countdown(next, t) : html`<section class="card countdown empty-cd"><b>Žádný termín</b><p class="muted">Naplánuj další očkování, odčervení nebo kontrolu.</p></section>`}
 
     <button class="btn primary block" data-add>${icon('plus', 20)} Přidat záznam nebo termín</button>

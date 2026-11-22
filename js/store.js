@@ -21,7 +21,7 @@ const SKEY = 'cipisek.settings.v1';
 
 const DEFAULT_META = {
   id: 'dog', name: 'Cipísek', birthDate: '2026-08-31', sex: 'm',
-  breed: 'Pyrenejský horský pes', chip: '', notes: '', updatedAt: 0,
+  breed: 'Pyrenejský horský pes', chip: '', notes: '', vetName: '', vetPhone: '', updatedAt: 0,
 };
 const DEFAULT_SETTINGS = {
   who: '', paceKmh: 3, mapLayer: 'sat-labels', showRef: true,

@@ -60,6 +60,8 @@ function draw() {
         ${field({ label: 'Datum narození', name: 'birthDate', type: 'date', value: meta.birthDate, attrs: `required max="${todayISO()}"`, hint: `Dnes: ${ageText(meta.birthDate)}` })}
         ${select({ label: 'Pohlaví (jen pro orientační křivku váhy)', name: 'sex', value: meta.sex, options: [['m', 'Pes'], ['f', 'Fena']] })}
         ${field({ label: 'Číslo čipu (volitelně)', name: 'chip', value: meta.chip || '', attrs: 'maxlength="20" inputmode="numeric" autocomplete="off"', hint: 'Objeví se na kartě pro veterináře.' })}
+        ${field({ label: 'Veterinář (jméno nebo klinika)', name: 'vetName', value: meta.vetName || '', attrs: 'maxlength="60"' })}
+        ${field({ label: 'Telefon veterináře', name: 'vetPhone', type: 'tel', value: meta.vetPhone || '', attrs: 'maxlength="25" inputmode="tel" autocomplete="off"', hint: 'Ukáže se v první pomoci jako tlačítko „Zavolat“.' })}
         <label class="field"><span>Alergie a poznámky pro veterináře</span><textarea name="notes" rows="2" maxlength="300" placeholder="např. alergie na kuřecí maso">${meta.notes || ''}</textarea></label>
         <button class="btn primary block" type="submit">Uložit</button>
       </form>
@@ -311,7 +313,7 @@ async function onSubmit(e) {
   const f = readForm(form);
   switch (form.dataset.form) {
     case 'dog':
-      store.setMeta({ name: f.name.trim() || 'Cipísek', birthDate: f.birthDate, sex: f.sex, chip: f.chip.trim(), notes: f.notes.trim() });
+      store.setMeta({ name: f.name.trim() || 'Cipísek', birthDate: f.birthDate, sex: f.sex, chip: f.chip.trim(), notes: f.notes.trim(), vetName: f.vetName.trim(), vetPhone: f.vetPhone.replace(/[^\d+ ]/g, '').trim() });
       toast('Uloženo.');
       draw();
       break;

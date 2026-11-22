@@ -597,3 +597,28 @@ input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; border-radius
 .calist { display: flex; flex-direction: column; gap: 10px; }
 .calist li { display: flex; flex-direction: column; gap: 6px; }
 .calist .chip { text-decoration: none; }
+
+/* ---------- počasí ---------- */
+.wx { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: var(--r-ctl); background: var(--primary-soft); }
+.wx-warn { background: var(--warn-soft); }
+.wx-bad { background: var(--bad-soft); }
+.wx-main { display: flex; align-items: center; gap: 12px; }
+.wx-main > div { flex: 1; display: flex; flex-direction: column; }
+.wx-main b { font-size: 1.5rem; font-weight: 760; letter-spacing: -0.02em; line-height: 1.1; }
+.wx-main small { color: var(--ink-2); }
+.wx-e { font-size: 2rem; }
+.wx-best { font-weight: 650; }
+
+/* ---------- první pomoc ---------- */
+.aid-urgent { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
+.aid-urgent > h2 { color: var(--bad); }
+.aid { display: flex; flex-direction: column; gap: 6px; }
+.aid details { border-radius: var(--r-ctl); background: var(--surface-2); }
+.aid summary { list-style: none; cursor: pointer; padding: 12px 14px; font-weight: 650; display: flex; gap: 8px; align-items: center; min-height: 48px; }
+.aid summary::-webkit-details-marker { display: none; }
+.aid summary::after { content: '+'; margin-left: auto; font-size: 1.3rem; color: var(--ink-2); }
+.aid details[open] summary::after { content: '−'; }
+.aid .steps { list-style: decimal; padding: 0 14px 14px 36px; display: flex; flex-direction: column; gap: 6px; }
+.tox { display: flex; flex-direction: column; gap: 6px; }
+.tox li { display: flex; gap: 10px; align-items: flex-start; }
+a.btn { text-decoration: none; }

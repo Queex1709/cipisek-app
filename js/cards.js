@@ -12,6 +12,7 @@ import {
   slotsFor, slotState, toggleSlot, doseText, downloadTaskIcs, downloadAllIcs, gcalLinks, enableNotifications, notificationsSupported,
 } from './tasks.js';
 import { pottyStats, nextOutside } from './insights.js';
+import * as weather from './weather.js';
 
 // =====================================================================
 // Budíky do kalendáře telefonu (zazvoní i při zavřené aplikaci)
@@ -234,6 +235,9 @@ function openDevice(id, redraw) {
 const hm = (ts) => new Date(ts).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
 const ivText = (m) => (m >= 60 ? `${(m / 60).toFixed(1).replace('.0', '').replace('.', ',')} h` : `${m} min`);
 
+export const weatherCard = () => weather.card();
+export const weatherHydrate = () => weather.hydrate();
+
 export function pottyCard() {
   const meta = store.getMeta();
   const months = ageParts(meta.birthDate).months;
@@ -282,6 +286,7 @@ export function handleClick(e, redraw) {
     if (s) { toggleSlot(s); redraw(); }
     return true;
   }
+  if (t.closest('[data-wx]')) { weather.refreshNow(); return true; }
   if (t.closest('[data-cal-all]')) { calendarSheet(); return true; }
   if (t.closest('[data-task-add]')) { addTaskSheet(redraw); return true; }
   if (t.closest('[data-task-manage]')) { manageSheet(redraw); return true; }

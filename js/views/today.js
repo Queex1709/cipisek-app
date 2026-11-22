@@ -108,6 +108,7 @@ function draw() {
       })}</ul>` : html`<p class="empty">Zatím nic. Klepni nahoře na to, co se právě stalo.</p>`}
     </section>
 
+    ${cards.weatherCard()}
     ${cards.pottyCard()}
     ${cards.whereCard()}
 
@@ -137,6 +138,7 @@ function draw() {
   `);
 
   setAvatar();
+  cards.weatherHydrate();
 }
 
 async function setAvatar() {
