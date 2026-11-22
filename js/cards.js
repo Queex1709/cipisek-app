@@ -9,9 +9,32 @@ import {
   TASK_PRESETS, TASK_KIND_LABEL, DEVICE_TYPES, DEVICE_BY, WHERE_OPTIONS,
 } from './data.js';
 import {
-  slotsFor, slotState, toggleSlot, doseText, downloadTaskIcs, enableNotifications, notificationsSupported,
+  slotsFor, slotState, toggleSlot, doseText, downloadTaskIcs, downloadAllIcs, gcalLinks, enableNotifications, notificationsSupported,
 } from './tasks.js';
 import { pottyStats, nextOutside } from './insights.js';
+
+// =====================================================================
+// Budíky do kalendáře telefonu (zazvoní i při zavřené aplikaci)
+// =====================================================================
+function calendarSheet(only = null) {
+  const tasks = (only ? [only] : store.list('tasks').filter((t) => t.active !== false && t.times?.length));
+  if (!tasks.length) { toast('Nejdřív přidej nějaký úkol.'); return; }
+  const s = openSheet({
+    title: 'Budíky do kalendáře',
+    body: html`<div class="form">
+      <p class="muted">Aplikace na pozadí zvonit nemůže, kalendář v telefonu ano. Přidej si úkoly do něj a zazvoní i při zavřené aplikaci.</p>
+      <h3 class="sec">Google Kalendář (doporučeno)</h3>
+      <p class="muted small">Klepni na čas, otevře se Kalendář s hotovou opakovanou událostí a stačí dát „Uložit“.</p>
+      <ul class="calist">${tasks.map((t) => html`<li><b>${t.emoji || '🔔'} ${t.title}</b>
+        <span class="chips">${gcalLinks(t).map((l) => html`<a class="chip btn-chip" target="_blank" rel="noopener" href="${l.url}">${icon('cal', 14)} ${l.time}</a>`)}</span></li>`)}</ul>
+      <h3 class="sec">Všechno najednou</h3>
+      <button class="btn ghost block" data-ics-all>${icon('download', 18)} Stáhnout soubor (.ics)</button>
+      <p class="muted small">Po stažení ho otevři (v oznámení o stažení nebo ve složce Stažené) a zvol kalendář. Přidají se všechny úkoly najednou.</p>
+      <p class="muted small">Tip: v Kalendáři u události nastav upozornění „v čase události“, ať zazvoní přesně.</p>
+    </div>`,
+  });
+  s.$('[data-ics-all]').onclick = () => { downloadAllIcs(tasks); toast('Soubor je stažený. Otevři ho a přidej do kalendáře.'); };
+}
 
 // =====================================================================
 // Úkoly
@@ -35,6 +58,7 @@ export function tasksCard() {
       </button></li>`;
     })}</ul>` : html`<p class="empty">Žádné úkoly. Přidej třeba prášky na klouby nebo krmení.</p>`}
     ${askNotif ? html`<button class="btn ghost small" data-notif>${icon('cal', 16)} Zapnout upozornění</button>` : ''}
+    <button class="btn ghost small" data-cal-all>${icon('cal', 16)} Budíky do kalendáře</button>
     <button class="btn ghost small" data-task-add>${icon('plus', 16)} Přidat úkol</button>
   </section>`;
 }
@@ -124,7 +148,7 @@ export function taskSheet(existing, preset, redraw) {
     redraw?.();
   };
   const ics = s.$('[data-ics]');
-  if (ics) ics.onclick = () => { downloadTaskIcs(existing); toast('Soubor kalendáře je stažený. Otevři ho a přidej do kalendáře.'); };
+  if (ics) ics.onclick = () => { s.close(); setTimeout(() => calendarSheet(existing), 50); };
   const del = s.$('[data-del]');
   if (del) del.onclick = async () => {
     if (await confirmDialog({ title: 'Smazat úkol?', text: 'Zmizí všem v rodině. Odškrtnutá historie zůstane.', ok: 'Smazat', danger: true })) { store.del('tasks', existing.id); s.close(); redraw?.(); }
@@ -258,6 +282,7 @@ export function handleClick(e, redraw) {
     if (s) { toggleSlot(s); redraw(); }
     return true;
   }
+  if (t.closest('[data-cal-all]')) { calendarSheet(); return true; }
   if (t.closest('[data-task-add]')) { addTaskSheet(redraw); return true; }
   if (t.closest('[data-task-manage]')) { manageSheet(redraw); return true; }
   if (t.closest('[data-notif]')) {

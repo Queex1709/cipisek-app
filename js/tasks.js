@@ -134,7 +134,43 @@ export async function enableNotifications() {
 
 // ---------- budík do kalendáře (.ics s opakováním) ----------
 const BYDAY = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
-const ics = (x) => String(x).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+const ics = (x) => String(x).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+
+/** Opakování a první den úkolu – společné pro .ics i odkaz do Google Kalendáře. */
+function recurrence(task) {
+  const start = task.startDate && task.startDate > todayISO() ? task.startDate : todayISO();
+  const weekly = task.days?.length && task.days.length < 7;
+  const rule = (weekly ? `FREQ=WEEKLY;BYDAY=${task.days.map((d) => BYDAY[d]).join(',')}` : 'FREQ=DAILY')
+    + (task.endDate ? `;UNTIL=${task.endDate.replaceAll('-', '')}T235959` : '');
+  return { ymd: start.replaceAll('-', ''), rule };
+}
+const summaryOf = (task) => {
+  const dose = doseText(task);
+  return `${store.getMeta().name}: ${task.title}${dose ? ` – ${dose}` : ''}`;
+};
+
+/** Odkazy do Google Kalendáře: jeden na každý čas úkolu, událost se opakuje a stačí „Uložit“. */
+export function gcalLinks(task) {
+  const { ymd, rule } = recurrence(task);
+  return (task.times || []).map((time) => {
+    const [h, m] = time.split(':').map((x) => x.padStart(2, '0'));
+    const end = new Date(2000, 0, 1, Number(h), Number(m) + 10);
+    const e = `${String(end.getHours()).padStart(2, '0')}${String(end.getMinutes()).padStart(2, '0')}`;
+    const q = new URLSearchParams({
+      action: 'TEMPLATE', text: summaryOf(task), details: task.note || 'Upozornění z aplikace Cipísek',
+      dates: `${ymd}T${h}${m}00/${ymd}T${e}00`, recur: `RRULE:${rule}`, ctz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Prague',
+    });
+    return { time, url: `https://calendar.google.com/calendar/render?${q}` };
+  });
+}
+
+export function icsForTasks(tasks) {
+  const body = tasks.map((t) => icsForTask(t).split('\r\n').filter((l) => !/^(BEGIN|END):VCALENDAR$|^VERSION|^PRODID|^CALSCALE/.test(l)).join('\r\n'));
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Cipisek//CS', 'CALSCALE:GREGORIAN', ...body, 'END:VCALENDAR'].join('\r\n');
+}
+export function downloadAllIcs(tasks) {
+  downloadBlob(new Blob([icsForTasks(tasks)], { type: 'text/calendar;charset=utf-8' }), 'cipisek-budiky.ics');
+}
 
 export function icsForTask(task) {
   const name = store.getMeta().name;

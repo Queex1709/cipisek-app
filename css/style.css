@@ -593,3 +593,7 @@ input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; border-radius
   .sheet-body { overflow: visible !important; padding: 0 !important; }
   .vc { padding: 0; font-size: 11pt; }
 }
+
+.calist { display: flex; flex-direction: column; gap: 10px; }
+.calist li { display: flex; flex-direction: column; gap: 6px; }
+.calist .chip { text-decoration: none; }
