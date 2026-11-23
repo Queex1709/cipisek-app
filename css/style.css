@@ -635,3 +635,8 @@ a.btn { text-decoration: none; }
 .deal-p s { color: var(--ink-2); font-size: 0.82rem; }
 .late { color: var(--bad); }
 .warn { background: var(--warn-soft); color: var(--warn-ink); padding: 10px 12px; border-radius: var(--r-ctl); font-size: 0.9rem; }
+
+/* ---------- načítání ---------- */
+.loader { display: grid; place-items: center; min-height: 40vh; }
+.loader svg { width: 44px; height: 44px; fill: var(--primary); animation: pawPulse 0.9s ease-in-out infinite; }
+@keyframes pawPulse { 50% { transform: scale(1.25) rotate(-8deg); opacity: 0.55; } }

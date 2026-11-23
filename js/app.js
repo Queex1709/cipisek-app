@@ -36,6 +36,14 @@ function buildChrome() {
 }
 function updateBrand() { $('#brand-name').textContent = store.getMeta().name || 'Cipísek'; }
 
+/** Skryje úvodní animaci (nejdřív po 800 ms, ať se stihne ukázat). */
+function hideBoot() {
+  const b = document.getElementById('boot');
+  if (!b) return;
+  const wait = Math.max(0, 800 - performance.now());
+  setTimeout(() => { b.classList.add('done'); setTimeout(() => b.remove(), 500); }, wait);
+}
+
 async function route() {
   const hash = location.hash.replace(/^#\/?/, '');
   const name = hash.split('?')[0] || 'dnes';
@@ -46,7 +54,7 @@ async function route() {
   current?.destroy?.();
   current = mod;
   const root = $('#view');
-  root.innerHTML = '';
+  root.innerHTML = '<div class="loader" role="status" aria-label="Načítám"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg></div>';
   root.className = 'view view-' + (ROUTES[name] ? name : 'dnes');
   window.scrollTo(0, 0);
   await mod.render(root);
@@ -163,6 +171,8 @@ function initPwa() {
   let reloaded = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (!hadController || reloaded) return;
+    // nepřerušuj nahrávání procházky ani rozepsaný formulář; v tom případě stačí příští otevření
+    if (tracker.isActive() || hasOpenSheet()) return;
     reloaded = true;
     location.reload();
   });
@@ -177,6 +187,7 @@ initPwa();
 const joining = handleJoin();
 addEventListener('hashchange', route);
 await route();
+hideBoot();
 if (!joining) welcome();
 sync.start();
 startReminders();

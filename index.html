@@ -14,8 +14,32 @@
   <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* úvodní obrazovka s animací – nezávislá na ostatních stylech, ať je vidět hned */
+    #boot { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+      background: linear-gradient(#2a7a67, #123f35); color: #fff; transition: opacity .35s ease, visibility .35s; font-family: system-ui, sans-serif; }
+    #boot.done { opacity: 0; visibility: hidden; }
+    #boot img { width: 112px; height: 112px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,.35); animation: bootBob 1.2s ease-in-out infinite; }
+    #boot .bootsteps { display: flex; gap: 14px; height: 30px; }
+    #boot .bootsteps svg { width: 26px; height: 26px; fill: #fff; opacity: 0; animation: bootStep 1.6s ease-in-out infinite; }
+    #boot .bootsteps svg:nth-child(odd) { transform: translateY(8px) rotate(-14deg); }
+    #boot .bootsteps svg:nth-child(even) { transform: translateY(-4px) rotate(14deg); }
+    #boot .bootsteps svg:nth-child(2) { animation-delay: .25s; } #boot .bootsteps svg:nth-child(3) { animation-delay: .5s; } #boot .bootsteps svg:nth-child(4) { animation-delay: .75s; }
+    #boot b { font-size: 1.4rem; letter-spacing: -.01em; }
+    #boot p { margin: 0; font-size: .9rem; opacity: .8; max-width: 260px; text-align: center; }
+    @keyframes bootBob { 50% { transform: translateY(-8px) scale(1.03); } }
+    @keyframes bootStep { 0% { opacity: 0; } 25%, 60% { opacity: .95; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { #boot img, #boot .bootsteps svg { animation: none; opacity: 1; } }
+  </style>
 </head>
 <body>
+  <div id="boot" role="status" aria-live="polite">
+    <img src="icons/icon-192.png" width="112" height="112" alt="">
+    <div class="bootsteps"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg></div>
+    <b>Cipísek</b>
+    <p id="bootMsg">Načítám…</p>
+  </div>
+  <script>setTimeout(function () { var b = document.getElementById('boot'), m = document.getElementById('bootMsg'); if (b && !b.classList.contains('done') && m) m.textContent = 'Načítání trvá dlouho. Zavři aplikaci a otevři ji znovu.'; }, 9000);</script>
   <div id="app">
     <header class="topbar">
       <a class="brand" href="#/dnes" aria-label="Domů">
