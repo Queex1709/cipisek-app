@@ -206,6 +206,7 @@ function drawInstall() {
   if (!el) return;
   const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  import('../update.js').then((m) => m.appVersion()).then((v) => { const l = $('#verLine', root); if (l) l.textContent = v ? `Verze aplikace: ${v}.` : ''; });
   el.innerHTML = String(html`
     <h2>Aplikace v telefonu</h2>
     ${standalone ? html`<p class="muted">Aplikace běží nainstalovaná.</p>`
@@ -214,6 +215,8 @@ function drawInstall() {
       : ios ? html`<p class="muted">V Safari klepni na <b>Sdílet</b> a pak <b>Přidat na plochu</b>.</p>`
       : html`<p class="muted">V Chrome otevři menu ⋮ a zvol <b>Instalovat aplikaci</b> (nebo <b>Přidat na plochu</b>). Instalace funguje jen přes https.</p>`}
     <button class="btn ghost block" data-help>${icon('info', 18)} Nápověda: kde to najdu?</button>
+    <div class="btn-row"><button class="btn ghost" data-check-update>${icon('undo', 18)} Zkontrolovat aktualizace</button></div>
+    <p class="muted small" id="verLine"></p>
     <p class="muted small"><b>Zkratky na ploše:</b> na Androidu podrž prst na ikoně Cipíska. Objeví se „Čůral venku“, „Nehoda“, „Začít procházku“ a „Přidat fotku a váhu“. Každou z nich můžeš přetáhnout na plochu jako samostatnou ikonu, i vedle widgetu s počasím.</p>`);
 }
 
@@ -275,6 +278,7 @@ async function onClick(e) {
     draw();
     return;
   }
+  if (t.closest('[data-check-update]')) { import('../update.js').then((m) => m.manualCheck()); return; }
   if (t.closest('[data-help]')) { import('../help.js').then((m) => m.openHelp()); return; }
   if (t.closest('[data-install]')) {
     const ev = window.__installEvt;

@@ -5,6 +5,7 @@ import * as tracker from './tracker.js';
 import { seedDefaults, startReminders } from './tasks.js';
 import { openHelp } from './help.js';
 import { applyAccent } from './accent.js';
+import { showUpdateBar, setRegistration, checkForUpdate } from './update.js';
 import { $, $$, html, debounce, todayISO, fmtClock, fmtKm } from './util.js';
 import { icon, toast, openSheet, hasOpenSheet, field, readForm } from './ui.js';
 
@@ -160,23 +161,20 @@ function initPwa() {
   if (!('serviceWorker' in navigator)) return;
   const hadController = !!navigator.serviceWorker.controller;
   navigator.serviceWorker.register('sw.js').then((reg) => {
+    setRegistration(reg);
     reg.addEventListener('updatefound', () => {
       const nw = reg.installing;
       nw?.addEventListener('statechange', () => {
-        if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-          toast('Je tu nová verze aplikace.', { label: 'Obnovit', ms: 20000, onClick: () => nw.postMessage('SKIP_WAITING') });
-        }
+        if (nw.state === 'installed' && navigator.serviceWorker.controller) showUpdateBar();
       });
     });
+    // při každém otevření a pak každých 30 minut se zeptáme, jestli je nová verze
+    checkForUpdate();
+    setInterval(checkForUpdate, 30 * 60 * 1000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) checkForUpdate(); });
   }).catch((e) => console.warn('Service worker se nezaregistroval', e));
-  let reloaded = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (!hadController || reloaded) return;
-    // nepřerušuj nahrávání procházky ani rozepsaný formulář; v tom případě stačí příští otevření
-    if (tracker.isActive() || hasOpenSheet()) return;
-    reloaded = true;
-    location.reload();
-  });
+  // nová verze se aktivuje sama, ale stránku nepřerušujeme: ukáže se tlačítko Aktualizovat
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadController) showUpdateBar(); });
 }
 
 // ---------- Start ----------

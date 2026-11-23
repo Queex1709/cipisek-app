@@ -664,3 +664,8 @@ a.btn { text-decoration: none; }
 .swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px; border-radius: var(--r-ctl); border: 2px solid transparent; background: var(--surface-2); font-size: 0.78rem; font-weight: 600; text-align: center; }
 .swatch img { width: 52px; height: 52px; border-radius: 14px; }
 .swatch.on { border-color: var(--primary); background: var(--primary-soft); }
+
+/* ---------- pruh „nová verze“ ---------- */
+#updateBar { position: fixed; left: 50%; transform: translateX(-50%); top: calc(var(--top-h) + var(--safe-t) + 8px); z-index: 2500; width: calc(100% - 24px); max-width: calc(var(--maxw) - 24px);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 16px; border-radius: 16px; background: var(--primary); color: var(--primary-ink); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28); font-weight: 650; }
+#updateBar .btn { background: var(--primary-ink); color: var(--primary); flex: none; }
