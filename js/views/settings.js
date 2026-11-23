@@ -1,4 +1,5 @@
 /* views/settings.js – profil psa, kdo jsem, sdílení v rodině (Firebase), záloha, instalace aplikace. */
+import { ACCENTS, iconDir, applyAccent } from '../accent.js';
 import * as store from '../store.js';
 import * as sync from '../sync.js';
 import * as photodb from '../photodb.js';
@@ -69,6 +70,10 @@ function draw() {
 
     <section class="card">
       <h2>Vzhled a upozornění</h2>
+      <div class="field"><span>Barva aplikace</span>
+        <div class="swatches">${ACCENTS.map((a) => html`<button type="button" class="swatch ${(set.accent || 'g') === a.id ? 'on' : ''}" data-accent-pick="${a.id}" aria-pressed="${(set.accent || 'g') === a.id}">
+          <img src="${iconDir(a.id)}/icon-192.png" alt="">${a.name}</button>`)}</div>
+        <small>Změní barvy v aplikaci a úvodní obrazovku. Ikona na ploše se změní až po jejím odebrání a novém přidání (Chrome ji někdy aktualizuje sám za pár dní).</small></div>
       <form class="form" data-form="look">
         ${select({ label: 'Vzhled', name: 'theme', value: set.theme || 'auto', options: [['auto', 'Podle telefonu'], ['light', 'Světlý'], ['dark', 'Tmavý']] })}
         <button class="btn primary block" type="submit">Uložit</button>
@@ -262,6 +267,14 @@ async function onClick(e) {
   if (t.closest('[data-invite]')) return inviteSheet();
   if (t.closest('[data-export]')) return exportData();
   if (t.closest('[data-import]')) { $('#fImport', root).click(); return; }
+  const pick = t.closest('[data-accent-pick]');
+  if (pick) {
+    store.setSettings({ accent: pick.dataset.accentPick });
+    applyAccent(pick.dataset.accentPick);
+    toast('Barva změněna. Ikonu na ploše změníš odebráním a novým přidáním.');
+    draw();
+    return;
+  }
   if (t.closest('[data-help]')) { import('../help.js').then((m) => m.openHelp()); return; }
   if (t.closest('[data-install]')) {
     const ev = window.__installEvt;

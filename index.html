@@ -14,14 +14,32 @@
   <link rel="preload" href="fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    /* barva aplikace a vzhled hned na začátku, ať nic neproblikne */
+    (function () {
+      try {
+        var s = JSON.parse(localStorage.getItem('cipisek.settings.v1') || '{}'), r = document.documentElement;
+        if (s.theme === 'light' || s.theme === 'dark') r.dataset.theme = s.theme;
+        var A = { a: ['#3f7fcf', '#1b4b8f', '#fff'], b: ['#f1a23a', '#c2691a', '#fff'], c: ['#8b6fd6', '#4d3a9a', '#fff'], e: ['#2a2f36', '#0e1114', '#f5c66b'], f: ['#bfeadb', '#8fd3bd', '#17493d'] }[s.accent];
+        if (A) {
+          r.dataset.accent = s.accent;
+          r.style.setProperty('--boot1', A[0]); r.style.setProperty('--boot2', A[1]); r.style.setProperty('--boot-fg', A[2]);
+          document.querySelector('link[rel=manifest]').href = 'manifest-' + s.accent + '.webmanifest';
+          document.querySelector('link[rel=icon]').href = 'icons/' + s.accent + '/icon.svg';
+          document.querySelector('link[rel=apple-touch-icon]').href = 'icons/' + s.accent + '/apple-touch-icon.png';
+          window.__bootIcon = 'icons/' + s.accent + '/icon-192.png';
+        }
+      } catch (e) {}
+    })();
+  </script>
   <style>
     /* úvodní obrazovka s animací – nezávislá na ostatních stylech, ať je vidět hned */
     #boot { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
-      background: linear-gradient(#2a7a67, #123f35); color: #fff; transition: opacity .35s ease, visibility .35s; font-family: system-ui, sans-serif; }
+      background: linear-gradient(var(--boot1, #2b7a66), var(--boot2, #164a3e)); color: var(--boot-fg, #fff); transition: opacity .35s ease, visibility .35s; font-family: system-ui, sans-serif; }
     #boot.done { opacity: 0; visibility: hidden; }
     #boot img { width: 112px; height: 112px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,.35); animation: bootBob 1.2s ease-in-out infinite; }
     #boot .bootsteps { display: flex; gap: 14px; height: 30px; }
-    #boot .bootsteps svg { width: 26px; height: 26px; fill: #fff; opacity: 0; animation: bootStep 1.6s ease-in-out infinite; }
+    #boot .bootsteps svg { width: 26px; height: 26px; fill: var(--boot-fg, #fff); opacity: 0; animation: bootStep 1.6s ease-in-out infinite; }
     #boot .bootsteps svg:nth-child(odd) { transform: translateY(8px) rotate(-14deg); }
     #boot .bootsteps svg:nth-child(even) { transform: translateY(-4px) rotate(14deg); }
     #boot .bootsteps svg:nth-child(2) { animation-delay: .25s; } #boot .bootsteps svg:nth-child(3) { animation-delay: .5s; } #boot .bootsteps svg:nth-child(4) { animation-delay: .75s; }
@@ -34,12 +52,13 @@
 </head>
 <body>
   <div id="boot" role="status" aria-live="polite">
-    <img src="icons/icon-192.png" width="112" height="112" alt="">
+    <img id="bootImg" src="icons/icon-192.png" width="112" height="112" alt="">
     <div class="bootsteps"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg></div>
     <b>Cipísek</b>
     <p id="bootMsg">Načítám…</p>
   </div>
-  <script>setTimeout(function () { var b = document.getElementById('boot'), m = document.getElementById('bootMsg'); if (b && !b.classList.contains('done') && m) m.textContent = 'Načítání trvá dlouho. Zavři aplikaci a otevři ji znovu.'; }, 9000);</script>
+  <script>if (window.__bootIcon) document.getElementById('bootImg').src = window.__bootIcon;
+setTimeout(function () { var b = document.getElementById('boot'), m = document.getElementById('bootMsg'); if (b && !b.classList.contains('done') && m) m.textContent = 'Načítání trvá dlouho. Zavři aplikaci a otevři ji znovu.'; }, 9000);</script>
   <div id="app">
     <header class="topbar">
       <a class="brand" href="#/dnes" aria-label="Domů">

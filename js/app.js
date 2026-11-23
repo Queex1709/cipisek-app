@@ -4,6 +4,7 @@ import * as sync from './sync.js';
 import * as tracker from './tracker.js';
 import { seedDefaults, startReminders } from './tasks.js';
 import { openHelp } from './help.js';
+import { applyAccent } from './accent.js';
 import { $, $$, html, debounce, todayISO, fmtClock, fmtKm } from './util.js';
 import { icon, toast, openSheet, hasOpenSheet, field, readForm } from './ui.js';
 
@@ -180,6 +181,7 @@ function initPwa() {
 
 // ---------- Start ----------
 applyTheme();
+applyAccent(store.getSettings().accent);
 seedDefaults();
 buildChrome();
 initIndicators();
