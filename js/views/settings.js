@@ -85,7 +85,7 @@ function draw() {
         <small>Změní barvy v aplikaci a úvodní obrazovku. Ikona na ploše se změní až po jejím odebrání a novém přidání (Chrome ji někdy aktualizuje sám za pár dní).</small></div>
       <form class="form" data-form="look">
         ${select({ label: 'Vzhled', name: 'theme', value: set.theme || 'auto', options: [['auto', 'Podle telefonu'], ['light', 'Světlý'], ['dark', 'Tmavý']] })}
-        <label class="check"><input type="checkbox" name="compat" ${set.compat ? 'checked' : ''}> <span><b>Režim pro starší telefon (Samsung)</b><br><small class="muted">Posune horní lištu pod stavový řádek a spodní lištu nad systémová tlačítka. Zjednoduší i efekty.</small></span></label>
+        <label class="check"><input type="checkbox" name="compat" ${set.compat ? 'checked' : ''}> <span><b>Režim pro starší telefon (Samsung)</b><br><small class="muted">Posune horní lištu pod stavový řádek a spodní lištu nad systémová tlačítka.</small></span></label>
         <div class="field"><span>Odsazení shora: <b id="cTv">${set.compatTop ?? 30}</b> px</span><input type="range" name="compatTop" min="0" max="70" step="2" value="${set.compatTop ?? 30}" data-compat-range></div>
         <div class="field"><span>Odsazení zdola: <b id="cBv">${set.compatBottom ?? 48}</b> px</span><input type="range" name="compatBottom" min="0" max="110" step="2" value="${set.compatBottom ?? 48}" data-compat-range></div>
         <button class="btn primary block" type="submit">Uložit</button>
