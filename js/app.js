@@ -39,12 +39,16 @@ function buildChrome() {
 function updateBrand() { $('#brand-name').textContent = store.getMeta().name || 'Cipísek'; }
 
 /** Krátká animace vstupu stránky nebo záložky (vypne se u zařízení se sníženým pohybem). */
-function playEnter(el, cls) {
+function playEnter(el, cls, dir = 0) {
   el.classList.remove('enter', 'enter-soft');
+  [...el.children].forEach((c, i) => c.style.setProperty('--i', Math.min(i, 9)));
+  el.dataset.dir = dir > 0 ? 'r' : dir < 0 ? 'l' : '';
   void el.offsetWidth;
   el.classList.add(cls);
-  setTimeout(() => el.classList.remove(cls), 320);
+  setTimeout(() => el.classList.remove(cls), 1000);
 }
+const ORDER = ['dnes', 'prochazky', 'vychova', 'jidlo', 'rust', 'zdravi', 'nastaveni'];
+let prevRoute = null;
 document.addEventListener('click', (e) => {
   if (e.target.closest('.seg [data-tab]')) setTimeout(() => playEnter($('#view'), 'enter-soft'), 0);
 });
@@ -71,7 +75,9 @@ async function route() {
   root.className = 'view view-' + (ROUTES[name] ? name : 'dnes');
   window.scrollTo(0, 0);
   await mod.render(root);
-  playEnter(root, 'enter');
+  const ni = ORDER.indexOf(ROUTES[name] ? name : 'dnes'), pi = ORDER.indexOf(prevRoute);
+  playEnter(root, 'enter', prevRoute && pi >= 0 ? Math.sign(ni - pi) : 0);
+  prevRoute = ROUTES[name] ? name : 'dnes';
   $$('#nav a').forEach((a) => {
     const on = a.dataset.route === name;
     a.classList.toggle('on', on);

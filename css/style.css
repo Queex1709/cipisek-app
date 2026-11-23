@@ -692,8 +692,6 @@ a.btn { text-decoration: none; }
 /* ---------- plynulé přechody ---------- */
 @keyframes viewIn { from { opacity: 0; transform: translateY(12px); } }
 @keyframes viewSoft { from { opacity: 0; } }
-#view.enter { animation: viewIn 0.28s cubic-bezier(0.2, 0.7, 0.2, 1); }
-#view.enter-soft { animation: viewSoft 0.2s ease-out; }
 :root { interpolate-size: allow-keywords; }
 details::details-content { block-size: 0; overflow: clip; transition: block-size 0.26s ease, content-visibility 0.26s allow-discrete; }
 details[open]::details-content { block-size: auto; }
@@ -702,3 +700,16 @@ a.card:active, .day:active, .mile:active { transform: scale(0.985); }
 @keyframes pop { 50% { transform: scale(1.18); } }
 .chk-box { transition: background-color 0.18s, border-color 0.18s; }
 .sheet { transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+/* výraznější vstup: karty naskakují postupně, směr podle toho, kam se v liště přecházíš */
+@keyframes cardIn { from { opacity: 0; transform: translate(var(--dx, 0px), 26px) scale(0.96); } }
+#view.enter[data-dir="r"] { --dx: 44px; } #view.enter[data-dir="l"] { --dx: -44px; }
+#view.enter > * { animation: cardIn 0.55s cubic-bezier(0.2, 0.85, 0.25, 1) both; animation-delay: calc(var(--i, 0) * 55ms); }
+#view.enter-soft > *:not(.page-head):not(.seg) { animation: cardIn 0.4s cubic-bezier(0.2, 0.85, 0.25, 1) both; animation-delay: calc(var(--i, 0) * 40ms); --dx: 0px; }
+@keyframes navPop { 0% { transform: scale(0.6); } 55% { transform: scale(1.22); } 100% { transform: scale(1); } }
+.tabbar a.on .ic { animation: navPop 0.45s cubic-bezier(0.3, 1.4, 0.5, 1); }
+@keyframes checkPop { 0% { transform: scale(0.6); } 55% { transform: scale(1.35) rotate(-6deg); } 100% { transform: scale(1); } }
+.chk-box.pop { animation: checkPop 0.5s cubic-bezier(0.3, 1.4, 0.5, 1); }
+@keyframes heroIn { from { opacity: 0; transform: scale(0.9) translateY(10px); } }
+#view.enter .hero-age { animation: heroIn 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) 0.15s both; }
+html, body { overflow-x: clip; }

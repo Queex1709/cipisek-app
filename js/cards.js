@@ -283,7 +283,7 @@ export function handleClick(e, redraw) {
   let el;
   if ((el = t.closest('[data-slot]'))) {
     const s = slotsFor(todayISO()).find((x) => x.id === el.dataset.slot);
-    if (s) { toggleSlot(s); redraw(); }
+    if (s) { toggleSlot(s); redraw(); document.querySelector(`[data-slot="${s.id}"] .chk-box`)?.classList.add('pop'); }
     return true;
   }
   if (t.closest('[data-wx]')) { weather.refreshNow(); return true; }
