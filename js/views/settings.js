@@ -214,7 +214,7 @@ function drawInstall() {
       : ios ? html`<p class="muted">V Safari klepni na <b>Sdílet</b> a pak <b>Přidat na plochu</b>.</p>`
       : html`<p class="muted">V Chrome otevři menu ⋮ a zvol <b>Instalovat aplikaci</b> (nebo <b>Přidat na plochu</b>). Instalace funguje jen přes https.</p>`}
     <button class="btn ghost block" data-help>${icon('info', 18)} Nápověda: kde to najdu?</button>
-    <p class="muted small"><b>Zkratky na ploše:</b> na Androidu podrž prst na ikoně Cipíska. Objeví se „Čůral venku“, „Nehoda“, „Začít procházku“ a „Přidat fotku a váhu“. Každou z nich můžeš přetáhnout na plochu jako samostatnou ikonu, i vedle widgetu s počasím.</p>`);
+    <p class="muted small"><b>Zkratky na ploše:</b> na Androidu podrž prst na ikoně Cipíska. Objeví se „Čůral venku“, „Nehoda“, „Procházka start / konec“ a „Přidat fotku a váhu“. Každou z nich můžeš přetáhnout na plochu jako samostatnou ikonu, i vedle widgetu s počasím.</p>`);
 }
 
 // ---------- záloha ----------

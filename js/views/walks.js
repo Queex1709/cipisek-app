@@ -63,7 +63,7 @@ export async function render(r) {
   // zkratka z plochy: #/prochazky?q=start spustí nahrávání, q=stop ho ukončí
   const q = new URLSearchParams(location.hash.split('?')[1] || '').get('q');
   if (q) history.replaceState(null, '', location.pathname + location.search + '#/prochazky');
-  if (q === 'start') mode = 'rec';
+  if (q === 'start' || q === 'toggle') mode = 'rec';
   mode = tracker.isActive() ? 'rec' : mode;
   root.innerHTML = String(html`
     <header class="page-head"><h1>Procházky</h1></header>
@@ -95,8 +95,9 @@ export async function render(r) {
   }
   if (!root) return;
   initMap();
-  if (q === 'start' && !tracker.isActive()) startRec();
-  else if (q === 'stop' && tracker.isActive()) stopRec();
+  // toggle = jedna ikona na ploše: nahrávání zapne, a když už běží, ukončí ho
+  if ((q === 'start' || q === 'toggle') && !tracker.isActive()) { if (!(q === 'toggle' && tracker.hasRecovery())) startRec(); }
+  else if ((q === 'stop' || q === 'toggle') && tracker.isActive()) stopRec();
 }
 
 export function refresh() {
