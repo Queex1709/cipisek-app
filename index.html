@@ -27,38 +27,64 @@
           document.querySelector('link[rel=manifest]').href = 'manifest-' + s.accent + '.webmanifest';
           document.querySelector('link[rel=icon]').href = 'icons/' + s.accent + '/icon.svg';
           document.querySelector('link[rel=apple-touch-icon]').href = 'icons/' + s.accent + '/apple-touch-icon.png';
-          window.__bootIcon = 'icons/' + s.accent + '/icon-192.png';
         }
       } catch (e) {}
     })();
   </script>
   <style>
     /* úvodní obrazovka s animací – nezávislá na ostatních stylech, ať je vidět hned */
-    #boot { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
-      background: linear-gradient(var(--boot1, #2b7a66), var(--boot2, #164a3e)); color: var(--boot-fg, #fff); transition: opacity .35s ease, visibility .35s; font-family: system-ui, sans-serif; }
+    #boot { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; overflow: hidden;
+      background: linear-gradient(var(--boot1, #2b7a66), var(--boot2, #164a3e)); color: var(--boot-fg, #fff); transition: opacity .4s ease, visibility .4s; font-family: system-ui, sans-serif; }
     #boot.done { opacity: 0; visibility: hidden; }
-    #boot img { width: 112px; height: 112px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,.35); animation: bootBob 1.2s ease-in-out infinite; }
-    #boot .bootsteps { display: flex; gap: 14px; height: 30px; }
-    #boot .bootsteps svg { width: 26px; height: 26px; fill: var(--boot-fg, #fff); opacity: 0; animation: bootStep 1.6s ease-in-out infinite; }
-    #boot .bootsteps svg:nth-child(odd) { transform: translateY(8px) rotate(-14deg); }
+    #boot .hills { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 38%; opacity: .16; fill: #000; }
+    #boot .hills.back { opacity: .10; fill: #fff; height: 46%; }
+    #boot .stage { position: relative; width: 210px; height: 230px; display: grid; place-items: start center; }
+    #boot .dog { width: 210px; height: 210px; transform-origin: 50% 100%; animation: bootHop 1.5s cubic-bezier(.3,.7,.4,1) infinite; overflow: visible; }
+    #boot .shadow { position: absolute; bottom: 4px; left: 50%; width: 120px; height: 16px; margin-left: -60px; border-radius: 50%; background: rgba(0,0,0,.28); animation: bootShadow 1.5s cubic-bezier(.3,.7,.4,1) infinite; }
+    #boot .ear { transform-box: fill-box; transform-origin: 50% 0%; }
+    #boot .ear-l { animation: earL 1.5s ease-in-out infinite; } #boot .ear-r { animation: earR 1.5s ease-in-out infinite; }
+    #boot .eye { transform-box: fill-box; transform-origin: 50% 50%; animation: blink 3s infinite; }
+    #boot .tongue { transform-box: fill-box; transform-origin: 50% 0%; animation: pant .5s ease-in-out infinite alternate; }
+    #boot b { font-size: 1.6rem; letter-spacing: -.02em; }
+    #boot .bootsteps { display: flex; gap: 10px; height: 30px; align-items: center; }
+    #boot .bootsteps svg { width: 22px; height: 22px; fill: currentColor; opacity: 0; animation: bootStep 1.8s ease-in-out infinite; }
+    #boot .bootsteps svg:nth-child(odd) { transform: translateY(6px) rotate(-14deg); }
     #boot .bootsteps svg:nth-child(even) { transform: translateY(-4px) rotate(14deg); }
     #boot .bootsteps svg:nth-child(2) { animation-delay: .25s; } #boot .bootsteps svg:nth-child(3) { animation-delay: .5s; } #boot .bootsteps svg:nth-child(4) { animation-delay: .75s; }
-    #boot b { font-size: 1.4rem; letter-spacing: -.01em; }
-    #boot p { margin: 0; font-size: .9rem; opacity: .8; max-width: 260px; text-align: center; }
-    @keyframes bootBob { 50% { transform: translateY(-8px) scale(1.03); } }
+    #boot .bootsteps svg:nth-child(5) { animation-delay: 1s; } #boot .bootsteps svg:nth-child(6) { animation-delay: 1.25s; }
+    #boot p { margin: 0; font-size: .9rem; opacity: .8; max-width: 260px; text-align: center; min-height: 1.3em; }
+    @keyframes bootHop { 0%, 100% { transform: translateY(0) scale(1.04, .96); } 45% { transform: translateY(-26px) scale(.97, 1.03); } 60% { transform: translateY(-26px) scale(.97, 1.03); } 85% { transform: translateY(0) scale(1.04, .96); } }
+    @keyframes bootShadow { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.6); opacity: .5; } }
+    @keyframes earL { 0%, 100% { transform: rotate(0); } 45%, 60% { transform: rotate(14deg); } }
+    @keyframes earR { 0%, 100% { transform: rotate(0); } 45%, 60% { transform: rotate(-14deg); } }
+    @keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 94% { transform: scaleY(.08); } }
+    @keyframes pant { from { transform: scaleY(.85); } to { transform: scaleY(1.15); } }
     @keyframes bootStep { 0% { opacity: 0; } 25%, 60% { opacity: .95; } 100% { opacity: 0; } }
-    @media (prefers-reduced-motion: reduce) { #boot img, #boot .bootsteps svg { animation: none; opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { #boot .dog, #boot .shadow, #boot .ear, #boot .eye, #boot .tongue, #boot .bootsteps svg { animation: none; } #boot .bootsteps svg { opacity: .9; } }
   </style>
 </head>
 <body>
   <div id="boot" role="status" aria-live="polite">
-    <img id="bootImg" src="icons/icon-192.png" width="112" height="112" alt="">
-    <div class="bootsteps"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg></div>
+    <svg class="hills back" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 200V90l70-50 60 60 80-80 90 90 60-40 40 30v100z"/></svg><svg class="hills" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 200V120l90-60 70 50 70-70 80 80 90-40v120z"/></svg>
+    <div class="stage"><svg class="dog" viewBox="60 60 392 392" aria-hidden="true">
+        <circle cx="256" cy="268" r="190" fill="#000" opacity=".16"/>
+        <g class="ear ear-l"><path d="M132 196c-44 18-62 78-54 140 6 44 36 62 62 44 26-18 34-70 32-118-2-40-12-62-40-66z" fill="#c9965a"/></g>
+        <g class="ear ear-r"><path d="M380 196c44 18 62 78 54 140-6 44-36 62-62 44-26-18-34-70-32-118 2-40 12-62 40-66z" fill="#c9965a"/></g>
+        <g fill="#fff"><ellipse cx="256" cy="258" rx="134" ry="128"/><circle cx="150" cy="300" r="46"/><circle cx="362" cy="300" r="46"/><circle cx="176" cy="352" r="44"/><circle cx="336" cy="352" r="44"/><circle cx="256" cy="372" r="52"/><circle cx="190" cy="150" r="40"/><circle cx="322" cy="150" r="40"/><circle cx="256" cy="136" r="42"/></g>
+        <path d="M214 130c20-14 64-14 84 0-8 22-20 34-42 34s-34-12-42-34z" fill="#e3c9a0" opacity=".75"/>
+        <ellipse cx="256" cy="330" rx="66" ry="54" fill="#f2f4f6"/>
+        <g class="eye"><ellipse cx="198" cy="238" rx="15" ry="18" fill="#2a1d14"/><circle cx="203" cy="231" r="5.5" fill="#fff"/></g>
+        <g class="eye"><ellipse cx="314" cy="238" rx="15" ry="18" fill="#2a1d14"/><circle cx="319" cy="231" r="5.5" fill="#fff"/></g>
+        <path d="M176 206c10-9 26-10 38-3M336 206c-10-9-26-10-38-3" stroke="#d3b78a" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M222 292c0-14 16-22 34-22s34 8 34 22c0 16-18 28-34 28s-34-12-34-28z" fill="#1c1a1a"/><ellipse cx="240" cy="284" rx="10" ry="5" fill="#fff" opacity=".32"/>
+        <path d="M256 320v22" stroke="#1c1a1a" stroke-width="7" stroke-linecap="round"/>
+        <path d="M214 346c14 18 30 24 42 24s28-6 42-24" stroke="#1c1a1a" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path class="tongue" d="M238 362c2 22 12 32 18 32s16-10 18-32c-12 6-24 6-36 0z" fill="#ef7c8e"/></svg><span class="shadow"></span></div>
     <b>Cipísek</b>
+    <div class="bootsteps"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg></div>
     <p id="bootMsg">Načítám…</p>
   </div>
-  <script>if (window.__bootIcon) document.getElementById('bootImg').src = window.__bootIcon;
-setTimeout(function () { var b = document.getElementById('boot'), m = document.getElementById('bootMsg'); if (b && !b.classList.contains('done') && m) m.textContent = 'Načítání trvá dlouho. Zavři aplikaci a otevři ji znovu.'; }, 9000);</script>
+  <script>setTimeout(function () { var b = document.getElementById('boot'), m = document.getElementById('bootMsg'); if (b && !b.classList.contains('done') && m) m.textContent = 'Načítání trvá dlouho. Zavři aplikaci a otevři ji znovu.'; }, 9000);</script>
   <div id="app">
     <header class="topbar">
       <a class="brand" href="#/dnes" aria-label="Domů">
