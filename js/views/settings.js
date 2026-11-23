@@ -2,6 +2,7 @@
 import { ACCENTS, iconDir, applyAccent } from '../accent.js';
 import * as store from '../store.js';
 import * as sync from '../sync.js';
+import { applyCompat } from '../compat.js';
 import * as photodb from '../photodb.js';
 import { html, raw, $, todayISO, ageText, parseNum, fmtDate } from '../util.js';
 import { notificationsSupported, enableNotifications } from '../tasks.js';
@@ -27,6 +28,7 @@ export function render(r) {
   root.onclick = onClick;
   root.onsubmit = onSubmit;
   root.onchange = onChange;
+  root.oninput = onInput;
   addEventListener('cipisek:installable', onInstallable);
   draw();
   unsubStatus = sync.onStatus(paintStatus);
@@ -35,8 +37,15 @@ export const refresh = () => root && draw();
 export function destroy() {
   unsubStatus?.(); unsubStatus = null;
   removeEventListener('cipisek:installable', onInstallable);
-  if (root) { root.onclick = null; root.onsubmit = null; root.onchange = null; }
+  if (root) { root.onclick = null; root.onsubmit = null; root.onchange = null; root.oninput = null; }
   root = null;
+}
+
+function onInput(e) {
+  if (!e.target.matches('[data-compat-range]')) return;
+  const f = e.target.form, top = Number(f.compatTop.value), bot = Number(f.compatBottom.value);
+  $('#cTv', root).textContent = top; $('#cBv', root).textContent = bot;
+  applyCompat({ compat: true, compatTop: top, compatBottom: bot });   // náhled hned, uloží se tlačítkem Uložit
 }
 
 function paintStatus(s) {
@@ -76,6 +85,9 @@ function draw() {
         <small>Změní barvy v aplikaci a úvodní obrazovku. Ikona na ploše se změní až po jejím odebrání a novém přidání (Chrome ji někdy aktualizuje sám za pár dní).</small></div>
       <form class="form" data-form="look">
         ${select({ label: 'Vzhled', name: 'theme', value: set.theme || 'auto', options: [['auto', 'Podle telefonu'], ['light', 'Světlý'], ['dark', 'Tmavý']] })}
+        <label class="check"><input type="checkbox" name="compat" ${set.compat ? 'checked' : ''}> <span><b>Režim pro starší telefon (Samsung)</b><br><small class="muted">Posune horní lištu pod stavový řádek a spodní lištu nad systémová tlačítka. Zjednoduší i efekty.</small></span></label>
+        <div class="field"><span>Odsazení shora: <b id="cTv">${set.compatTop ?? 30}</b> px</span><input type="range" name="compatTop" min="0" max="70" step="2" value="${set.compatTop ?? 30}" data-compat-range></div>
+        <div class="field"><span>Odsazení zdola: <b id="cBv">${set.compatBottom ?? 48}</b> px</span><input type="range" name="compatBottom" min="0" max="110" step="2" value="${set.compatBottom ?? 48}" data-compat-range></div>
         <button class="btn primary block" type="submit">Uložit</button>
       </form>
       <p class="muted small">Upozornění na úkoly (prášky, krmení): ${!notificationsSupported() ? 'toto zařízení je nepodporuje.' : Notification.permission === 'granted' ? 'povolená. Ozvou se, když je aplikace otevřená nebo na pozadí.' : Notification.permission === 'denied' ? 'zakázaná. Povol je v nastavení prohlížeče.' : 'zatím nepovolená.'}
@@ -337,8 +349,9 @@ async function onSubmit(e) {
       draw();
       break;
     case 'look':
-      store.setSettings({ theme: f.theme });
+      store.setSettings({ theme: f.theme, compat: 'compat' in f, compatTop: Number(f.compatTop) || 0, compatBottom: Number(f.compatBottom) || 0 });
       document.documentElement.dataset.theme = f.theme === 'auto' ? '' : f.theme;
+      applyCompat(store.getSettings());
       toast('Uloženo.');
       break;
     case 'me':

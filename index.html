@@ -20,6 +20,7 @@
       try {
         var s = JSON.parse(localStorage.getItem('cipisek.settings.v1') || '{}'), r = document.documentElement;
         if (s.theme === 'light' || s.theme === 'dark') r.dataset.theme = s.theme;
+        if (s.compat) { r.dataset.compat = '1'; r.style.setProperty('--cx-t', (s.compatTop == null ? 30 : s.compatTop) + 'px'); r.style.setProperty('--cx-b', (s.compatBottom == null ? 48 : s.compatBottom) + 'px'); }
         var A = { a: ['#3f7fcf', '#1b4b8f', '#fff'], b: ['#f1a23a', '#c2691a', '#fff'], c: ['#8b6fd6', '#4d3a9a', '#fff'], e: ['#2a2f36', '#0e1114', '#f5c66b'], f: ['#bfeadb', '#8fd3bd', '#17493d'] }[s.accent];
         if (A) {
           r.dataset.accent = s.accent;

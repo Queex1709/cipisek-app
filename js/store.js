@@ -25,7 +25,7 @@ const DEFAULT_META = {
 };
 const DEFAULT_SETTINGS = {
   who: '', paceKmh: 3, mapLayer: 'sat-labels', showRef: true,
-  theme: 'auto', accent: 'g', notifOn: false, lastBackup: 0,
+  theme: 'auto', accent: 'g', compat: false, compatTop: 30, compatBottom: 48, notifOn: false, lastBackup: 0,
   familyCode: '', firebaseConfig: null, syncOn: false, pushedPhotos: [],
 };
 

@@ -3,32 +3,195 @@
   "source": "Kupi.cz",
   "note": "Orientační ceny z letáků. Platnost a cenu vždy ověř v obchodě.",
   "cats": [
-    { "id": "chicken", "label": "Kuřecí maso", "emoji": "🍗", "q": "kuřecí maso", "items": [
-      { "name": "Kuřecí mělněné maso", "pack": "0,5 kg", "store": "Lidl", "price": 64.9, "unit": "129,80 Kč/kg", "from": "2026-11-23", "to": "2026-11-25" },
-      { "name": "Mleté kuřecí maso Rabbit", "pack": "0,5 kg", "store": "Košík.cz", "price": 79.9, "unit": "159,80 Kč/kg" },
-      { "name": "Kuřecí trhané maso sous vide Krahulík", "pack": "0,3 kg", "store": "COOP", "price": 79.9, "unit": "266,33 Kč/kg", "to": "2026-12-31" },
-      { "name": "Kuřecí maso ve sklenici Pikok", "pack": "280 g", "store": "Lidl", "price": 54.9, "was": 69.9, "to": "2026-11-22" }
-    ] },
-    { "id": "turkey", "label": "Krůtí maso", "emoji": "🦃", "q": "krůtí maso", "items": [
-      { "name": "Krůtí mleté maso", "pack": "0,5 kg", "store": "Tesco", "price": 89.9, "was": 132.4, "unit": "179,80 Kč/kg", "to": "2026-11-24", "club": true },
-      { "name": "Krůtí maso ve vlastní šťávě Meining", "pack": "400 g", "store": "Penny Market", "price": 37.9, "was": 74.9, "unit": "94,75 Kč/kg", "to": "2026-11-24" },
-      { "name": "Krůtí maso ve sklenici Pikok", "pack": "280 g", "store": "Lidl", "price": 54.9, "was": 69.9, "to": "2026-11-22" }
-    ] },
-    { "id": "beef", "label": "Hovězí maso", "emoji": "🥩", "q": "hovězí maso", "items": [] },
-    { "id": "rice", "label": "Rýže", "emoji": "🍚", "q": "rýže", "items": [
-      { "name": "Rýže parboiled Lagris (3 kg)", "pack": "3 kg", "store": "Košík.cz", "price": 99.9, "unit": "33,30 Kč/kg" },
-      { "name": "Rýže parboiled Vitana", "pack": "800 g", "store": "Tesco", "price": 49.9, "unit": "62,38 Kč/kg", "to": "2026-12-01" },
-      { "name": "Rýže parboiled Lagris ve varných sáčcích", "pack": "800 g", "store": "Košík.cz", "price": 39.9, "unit": "49,88 Kč/kg", "to": "2026-11-24" }
-    ] },
-    { "id": "eggs", "label": "Vejce", "emoji": "🥚", "q": "vejce", "items": [
-      { "name": "Vejce M Tesco", "pack": "10 ks", "store": "Tesco", "price": 29.9, "was": 59.9, "unit": "2,99 Kč/ks", "to": "2026-11-22" },
-      { "name": "Vejce M Srdce Domova", "pack": "10 ks", "store": "BILLA", "price": 29.9, "was": 62.4, "unit": "2,99 Kč/ks", "from": "2026-11-23", "to": "2026-11-24", "club": true },
-      { "name": "Vejce S Tesco", "pack": "30 ks", "store": "Tesco", "price": 69.9, "unit": "2,33 Kč/ks", "to": "2026-11-24", "club": true },
-      { "name": "Vejce M Karlova Koruna", "pack": "10 ks", "store": "Penny Market", "price": 29.9, "unit": "2,99 Kč/ks", "from": "2026-11-27", "to": "2026-11-29" }
-    ] },
-    { "id": "carrot", "label": "Mrkev", "emoji": "🥕", "q": "mrkev", "items": [
-      { "name": "Mrkev", "pack": "1 kg", "store": "Tesco", "price": 12.9, "unit": "12,90 Kč/kg", "to": "2026-11-24", "club": true }
-    ] },
-    { "id": "kibble", "label": "Granule pro štěňata", "emoji": "🐶", "q": "granule štěňata", "items": [] }
+    {
+      "id": "chicken",
+      "label": "Kuřecí maso",
+      "emoji": "🍗",
+      "q": "kuřecí maso",
+      "items": [
+        {
+          "name": "Kuřecí mělněné maso",
+          "pack": "0,5 kg",
+          "store": "Lidl",
+          "price": 64.9,
+          "unit": "129,80 Kč/kg",
+          "from": "2026-11-23",
+          "to": "2026-11-25"
+        },
+        {
+          "name": "Mleté kuřecí maso Rabbit",
+          "pack": "0,5 kg",
+          "store": "Košík.cz",
+          "price": 79.9,
+          "unit": "159,80 Kč/kg"
+        },
+        {
+          "name": "Kuřecí trhané maso sous vide Krahulík",
+          "pack": "0,3 kg",
+          "store": "COOP",
+          "price": 79.9,
+          "unit": "266,33 Kč/kg",
+          "to": "2026-12-31"
+        },
+        {
+          "name": "Kuřecí maso ve sklenici Pikok",
+          "pack": "280 g",
+          "store": "Lidl",
+          "price": 54.9,
+          "was": 69.9,
+          "to": "2026-11-22"
+        }
+      ]
+    },
+    {
+      "id": "turkey",
+      "label": "Krůtí maso",
+      "emoji": "🦃",
+      "q": "krůtí maso",
+      "items": [
+        {
+          "name": "Krůtí mleté maso",
+          "pack": "0,5 kg",
+          "store": "Tesco",
+          "price": 89.9,
+          "was": 132.4,
+          "unit": "179,80 Kč/kg",
+          "to": "2026-11-24",
+          "club": true
+        },
+        {
+          "name": "Krůtí maso ve vlastní šťávě Meining",
+          "pack": "400 g",
+          "store": "Penny Market",
+          "price": 37.9,
+          "was": 74.9,
+          "unit": "94,75 Kč/kg",
+          "to": "2026-11-24"
+        },
+        {
+          "name": "Krůtí maso ve sklenici Pikok",
+          "pack": "280 g",
+          "store": "Lidl",
+          "price": 54.9,
+          "was": 69.9,
+          "to": "2026-11-22"
+        }
+      ]
+    },
+    {
+      "id": "beef",
+      "label": "Hovězí maso",
+      "emoji": "🥩",
+      "q": "hovězí maso",
+      "items": []
+    },
+    {
+      "id": "pork",
+      "label": "Vepřové maso",
+      "emoji": "🐖",
+      "q": "vepřové maso",
+      "items": []
+    },
+    {
+      "id": "rice",
+      "label": "Rýže",
+      "emoji": "🍚",
+      "q": "rýže",
+      "items": [
+        {
+          "name": "Rýže parboiled Lagris (3 kg)",
+          "pack": "3 kg",
+          "store": "Košík.cz",
+          "price": 99.9,
+          "unit": "33,30 Kč/kg"
+        },
+        {
+          "name": "Rýže parboiled Vitana",
+          "pack": "800 g",
+          "store": "Tesco",
+          "price": 49.9,
+          "unit": "62,38 Kč/kg",
+          "to": "2026-12-01"
+        },
+        {
+          "name": "Rýže parboiled Lagris ve varných sáčcích",
+          "pack": "800 g",
+          "store": "Košík.cz",
+          "price": 39.9,
+          "unit": "49,88 Kč/kg",
+          "to": "2026-11-24"
+        }
+      ]
+    },
+    {
+      "id": "eggs",
+      "label": "Vejce",
+      "emoji": "🥚",
+      "q": "vejce",
+      "items": [
+        {
+          "name": "Vejce M Tesco",
+          "pack": "10 ks",
+          "store": "Tesco",
+          "price": 29.9,
+          "was": 59.9,
+          "unit": "2,99 Kč/ks",
+          "to": "2026-11-22"
+        },
+        {
+          "name": "Vejce M Srdce Domova",
+          "pack": "10 ks",
+          "store": "BILLA",
+          "price": 29.9,
+          "was": 62.4,
+          "unit": "2,99 Kč/ks",
+          "from": "2026-11-23",
+          "to": "2026-11-24",
+          "club": true
+        },
+        {
+          "name": "Vejce S Tesco",
+          "pack": "30 ks",
+          "store": "Tesco",
+          "price": 69.9,
+          "unit": "2,33 Kč/ks",
+          "to": "2026-11-24",
+          "club": true
+        },
+        {
+          "name": "Vejce M Karlova Koruna",
+          "pack": "10 ks",
+          "store": "Penny Market",
+          "price": 29.9,
+          "unit": "2,99 Kč/ks",
+          "from": "2026-11-27",
+          "to": "2026-11-29"
+        }
+      ]
+    },
+    {
+      "id": "carrot",
+      "label": "Mrkev",
+      "emoji": "🥕",
+      "q": "mrkev",
+      "items": [
+        {
+          "name": "Mrkev",
+          "pack": "1 kg",
+          "store": "Tesco",
+          "price": 12.9,
+          "unit": "12,90 Kč/kg",
+          "to": "2026-11-24",
+          "club": true
+        }
+      ]
+    },
+    {
+      "id": "kibble",
+      "label": "Granule pro štěňata",
+      "emoji": "🐶",
+      "q": "granule štěňata",
+      "items": []
+    }
   ]
 }

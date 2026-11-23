@@ -714,3 +714,18 @@ a.card:active, .day:active, .mile:active { transform: scale(0.985); }
 @keyframes checkPop { 0% { transform: scale(0.6); } 55% { transform: scale(1.35) rotate(-6deg); } 100% { transform: scale(1); } }
 .chk-box.pop { animation: checkPop 0.5s cubic-bezier(0.3, 1.4, 0.5, 1); }
 html, body { overflow-x: clip; }
+
+/* ---------- Režim pro starší telefon (Nastavení → Vzhled) ---------- */
+.check { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+.check input { width: 24px; height: 24px; flex: none; margin-top: 2px; accent-color: var(--primary); }
+:root[data-compat] { --safe-t: var(--cx-t, 30px); --safe-b: var(--cx-b, 48px); }
+:root[data-compat] #app { min-height: 100vh; }
+:root[data-compat] .topbar { background: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none; padding-left: 22px; padding-right: 20px; border-bottom: 1px solid var(--line); }
+:root[data-compat] .view { padding-left: 20px; padding-right: 20px; }
+:root[data-compat] .tabbar { background: var(--surface); }
+:root[data-compat] .sheet { max-height: 88vh; }
+:root[data-compat] .sheet-full { height: 88vh; }
+:root[data-compat] .sheet.lb { height: 100vh; }
+:root[data-compat] .rv { opacity: 1; transform: none; }
+:root[data-compat] #view.enter, :root[data-compat] #view.enter-soft { animation: none; }
+:root[data-compat] html, :root[data-compat] body { overflow-x: hidden; }
