@@ -66,20 +66,34 @@
 <body>
   <div id="boot" role="status" aria-live="polite">
     <svg class="hills back" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 200V90l70-50 60 60 80-80 90 90 60-40 40 30v100z"/></svg><svg class="hills" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 200V120l90-60 70 50 70-70 80 80 90-40v120z"/></svg>
-    <div class="stage"><svg class="dog" viewBox="60 60 392 392" aria-hidden="true">
-        <circle cx="256" cy="268" r="190" fill="#000" opacity=".16"/>
-        <g class="ear ear-l"><path d="M132 196c-44 18-62 78-54 140 6 44 36 62 62 44 26-18 34-70 32-118-2-40-12-62-40-66z" fill="#c9965a"/></g>
-        <g class="ear ear-r"><path d="M380 196c44 18 62 78 54 140-6 44-36 62-62 44-26-18-34-70-32-118 2-40 12-62 40-66z" fill="#c9965a"/></g>
-        <g fill="#fff"><ellipse cx="256" cy="258" rx="134" ry="128"/><circle cx="150" cy="300" r="46"/><circle cx="362" cy="300" r="46"/><circle cx="176" cy="352" r="44"/><circle cx="336" cy="352" r="44"/><circle cx="256" cy="372" r="52"/><circle cx="190" cy="150" r="40"/><circle cx="322" cy="150" r="40"/><circle cx="256" cy="136" r="42"/></g>
-        <path d="M214 130c20-14 64-14 84 0-8 22-20 34-42 34s-34-12-42-34z" fill="#e3c9a0" opacity=".75"/>
-        <ellipse cx="256" cy="330" rx="66" ry="54" fill="#f2f4f6"/>
-        <g class="eye"><ellipse cx="198" cy="238" rx="15" ry="18" fill="#2a1d14"/><circle cx="203" cy="231" r="5.5" fill="#fff"/></g>
-        <g class="eye"><ellipse cx="314" cy="238" rx="15" ry="18" fill="#2a1d14"/><circle cx="319" cy="231" r="5.5" fill="#fff"/></g>
-        <path d="M176 206c10-9 26-10 38-3M336 206c-10-9-26-10-38-3" stroke="#d3b78a" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M222 292c0-14 16-22 34-22s34 8 34 22c0 16-18 28-34 28s-34-12-34-28z" fill="#1c1a1a"/><ellipse cx="240" cy="284" rx="10" ry="5" fill="#fff" opacity=".32"/>
-        <path d="M256 320v22" stroke="#1c1a1a" stroke-width="7" stroke-linecap="round"/>
-        <path d="M214 346c14 18 30 24 42 24s28-6 42-24" stroke="#1c1a1a" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path class="tongue" d="M238 362c2 22 12 32 18 32s16-10 18-32c-12 6-24 6-36 0z" fill="#ef7c8e"/></svg><span class="shadow"></span></div>
+    <div class="stage"><svg class="dog" viewBox="20 40 360 360" aria-hidden="true">
+  <circle cx="200" cy="230" r="172" fill="#000" opacity=".16"/>
+  <!-- huňatý krk a límec -->
+  <g fill="#f4f7f8">
+    <circle cx="120" cy="300" r="44"/><circle cx="280" cy="300" r="44"/><circle cx="92" cy="262" r="30"/><circle cx="308" cy="262" r="30"/>
+    <circle cx="150" cy="340" r="42"/><circle cx="250" cy="340" r="42"/><circle cx="200" cy="352" r="46"/>
+  </g>
+  <!-- uši: malé, sklopené, žlutošedé -->
+  <g class="ear ear-l"><path d="M124 100C84 92 56 138 66 198c4 24 30 20 46-6 12-20 20-60 12-92z" fill="#c9a36a"/><path d="M112 118c-16 6-28 36-24 64" stroke="#a9834d" stroke-width="5" stroke-linecap="round" fill="none" opacity=".5"/></g>
+  <g class="ear ear-r"><path d="M276 100c40-8 68 38 58 98-4 24-30 20-46-6-12-20-20-60-12-92z" fill="#c9a36a"/><path d="M288 118c16 6 28 36 24 64" stroke="#a9834d" stroke-width="5" stroke-linecap="round" fill="none" opacity=".5"/></g>
+  <!-- hlava -->
+  <path d="M200 66c72 0 98 52 94 112-3 46-26 80-46 108-14 20-34 28-48 28s-34-8-48-28c-20-28-43-62-46-108-4-60 22-112 94-112z" fill="#fff" stroke="#dde5e9" stroke-width="3"/>
+  <!-- jezevčí znaky po stranách hlavy, uprostřed bílá lysina -->
+  <path d="M112 114C126 84 156 68 186 66c-2 24-8 42-18 60-20-16-38-14-56-12z" fill="#d6b98a"/>
+  <path d="M288 114C274 84 244 68 214 66c2 24 8 42 18 60 20-16 38-14 56-12z" fill="#d6b98a"/>
+  <!-- chlupatější tváře -->
+  <g fill="#fff"><circle cx="106" cy="214" r="15"/><circle cx="294" cy="214" r="15"/><circle cx="116" cy="250" r="16"/><circle cx="284" cy="250" r="16"/><circle cx="134" cy="282" r="14"/><circle cx="266" cy="282" r="14"/></g>
+  <!-- tlama -->
+  <ellipse cx="200" cy="268" rx="52" ry="42" fill="#f1f4f6"/>
+  <!-- oči: tmavé, mandlové -->
+  <g class="eye"><ellipse cx="156" cy="174" rx="12" ry="8.5" fill="#2a1d14" transform="rotate(10 156 174)"/><circle cx="160" cy="171" r="3" fill="#fff"/></g>
+  <g class="eye"><ellipse cx="244" cy="174" rx="12" ry="8.5" fill="#2a1d14" transform="rotate(-10 244 174)"/><circle cx="248" cy="171" r="3" fill="#fff"/></g>
+  <!-- nos a pusa -->
+  <path d="M174 238c0-10 12-16 26-16s26 6 26 16c0 12-14 22-26 22s-26-10-26-22z" fill="#1c1a1a"/><ellipse cx="190" cy="232" rx="8" ry="3.6" fill="#fff" opacity=".3"/>
+  <path d="M200 260v16" stroke="#1c1a1a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M166 280c10 14 22 18 34 18s24-4 34-18" stroke="#1c1a1a" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path class="tongue" d="M184 292c1 18 9 26 16 26s15-8 16-26c-10 5-22 5-32 0z" fill="#ef7c8e"/>
+</svg><span class="shadow"></span></div>
     <b>Cipísek</b>
     <div class="bootsteps"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="4.6" ry="3.8"/><ellipse cx="5.6" cy="11" rx="1.9" ry="2.5"/><ellipse cx="9.4" cy="6.8" rx="2" ry="2.7"/><ellipse cx="14.6" cy="6.8" rx="2" ry="2.7"/><ellipse cx="18.4" cy="11" rx="1.9" ry="2.5"/></svg></div>
     <p id="bootMsg">Načítám…</p>
