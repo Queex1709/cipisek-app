@@ -41,11 +41,10 @@ function updateBrand() { $('#brand-name').textContent = store.getMeta().name || 
 /** Krátká animace vstupu stránky nebo záložky (vypne se u zařízení se sníženým pohybem). */
 function playEnter(el, cls, dir = 0) {
   el.classList.remove('enter', 'enter-soft');
-  [...el.children].forEach((c, i) => c.style.setProperty('--i', Math.min(i, 9)));
   el.dataset.dir = dir > 0 ? 'r' : dir < 0 ? 'l' : '';
   void el.offsetWidth;
   el.classList.add(cls);
-  setTimeout(() => el.classList.remove(cls), 1000);
+  setTimeout(() => el.classList.remove(cls), 450);
 }
 const ORDER = ['dnes', 'prochazky', 'vychova', 'jidlo', 'rust', 'zdravi', 'nastaveni'];
 let prevRoute = null;
