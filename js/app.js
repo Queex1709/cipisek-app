@@ -38,6 +38,17 @@ function buildChrome() {
 }
 function updateBrand() { $('#brand-name').textContent = store.getMeta().name || 'Cipísek'; }
 
+/** Krátká animace vstupu stránky nebo záložky (vypne se u zařízení se sníženým pohybem). */
+function playEnter(el, cls) {
+  el.classList.remove('enter', 'enter-soft');
+  void el.offsetWidth;
+  el.classList.add(cls);
+  setTimeout(() => el.classList.remove(cls), 320);
+}
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.seg [data-tab]')) setTimeout(() => playEnter($('#view'), 'enter-soft'), 0);
+});
+
 /** Skryje úvodní animaci (nejdřív po 800 ms, ať se stihne ukázat). */
 function hideBoot() {
   const b = document.getElementById('boot');
@@ -60,6 +71,7 @@ async function route() {
   root.className = 'view view-' + (ROUTES[name] ? name : 'dnes');
   window.scrollTo(0, 0);
   await mod.render(root);
+  playEnter(root, 'enter');
   $$('#nav a').forEach((a) => {
     const on = a.dataset.route === name;
     a.classList.toggle('on', on);
