@@ -701,11 +701,14 @@ a.card:active, .day:active, .mile:active { transform: scale(0.985); }
 .chk-box { transition: background-color 0.18s, border-color 0.18s; }
 .sheet { transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
 
-/* vstup stránky: animuje se jen jeden prvek (celý pohled), aby to na telefonu neškubalo */
-@keyframes pageIn { from { opacity: 0; transform: translate3d(var(--dx, 0px), 14px, 0); } }
-#view.enter { animation: pageIn 0.3s cubic-bezier(0.2, 0.8, 0.25, 1) both; }
-#view.enter[data-dir="r"] { --dx: 28px; } #view.enter[data-dir="l"] { --dx: -28px; }
-#view.enter-soft { animation: viewSoft 0.18s ease-out both; }
+/* vstup stránky: pomalejší, dobře znatelný posun ze směru, odkud přicházíš */
+@keyframes pageIn { from { opacity: 0.25; transform: translate3d(var(--dx, 0px), 0, 0); } }
+#view.enter { animation: pageIn 0.5s cubic-bezier(0.2, 0.8, 0.25, 1) both; }
+#view.enter[data-dir="r"] { --dx: 46px; } #view.enter[data-dir="l"] { --dx: -46px; }
+#view.enter-soft { animation: viewSoft 0.3s ease-out both; }
+/* karty vyskakují při posouvání stránky */
+.rv { opacity: 0; transform: translate3d(0, 34px, 0) scale(0.97); }
+.rv-in { opacity: 1; transform: none; transition: opacity 0.55s ease, transform 0.75s cubic-bezier(0.3, 1.35, 0.5, 1); }
 @keyframes navPop { 0% { transform: scale(0.6); } 55% { transform: scale(1.22); } 100% { transform: scale(1); } }
 .tabbar a.on .ic { animation: navPop 0.45s cubic-bezier(0.3, 1.4, 0.5, 1); }
 @keyframes checkPop { 0% { transform: scale(0.6); } 55% { transform: scale(1.35) rotate(-6deg); } 100% { transform: scale(1); } }

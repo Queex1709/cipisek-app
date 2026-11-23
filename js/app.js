@@ -39,12 +39,33 @@ function buildChrome() {
 function updateBrand() { $('#brand-name').textContent = store.getMeta().name || 'Cipísek'; }
 
 /** Krátká animace vstupu stránky nebo záložky (vypne se u zařízení se sníženým pohybem). */
+/** Karty „vyskakují“, jakmile se při posouvání dostanou na obrazovku. Jen po otevření stránky nebo záložky,
+    ne při každém překreslení (jinak by to blikalo). */
+let revealIO = null;
+function setupReveal(root) {
+  revealIO?.disconnect();
+  if (!('IntersectionObserver' in window)) return;
+  let n = 0, timer = 0;
+  revealIO = new IntersectionObserver((entries) => {
+    entries.filter((e) => e.isIntersecting).forEach((e) => {
+      const el = e.target;
+      revealIO.unobserve(el);
+      el.style.transitionDelay = `${Math.min(n++, 5) * 70}ms`;
+      el.classList.add('rv-in');
+      el.addEventListener('transitionend', () => { el.classList.remove('rv', 'rv-in'); el.style.transitionDelay = ''; }, { once: true });
+    });
+    clearTimeout(timer); timer = setTimeout(() => { n = 0; }, 250);
+  }, { threshold: 0.06, rootMargin: '0px 0px -4% 0px' });
+  [...root.children].forEach((c) => { c.classList.add('rv'); revealIO.observe(c); });
+}
+
 function playEnter(el, cls, dir = 0) {
+  if (cls === 'enter' || cls === 'enter-soft') setupReveal(el);
   el.classList.remove('enter', 'enter-soft');
   el.dataset.dir = dir > 0 ? 'r' : dir < 0 ? 'l' : '';
   void el.offsetWidth;
   el.classList.add(cls);
-  setTimeout(() => el.classList.remove(cls), 450);
+  setTimeout(() => el.classList.remove(cls), 650);
 }
 const ORDER = ['dnes', 'prochazky', 'vychova', 'jidlo', 'rust', 'zdravi', 'nastaveni'];
 let prevRoute = null;
