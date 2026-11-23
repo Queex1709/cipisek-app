@@ -59,9 +59,9 @@
       ]
     },
     {
-      "name": "Procházka start / konec",
+      "name": "Začít procházku",
       "short_name": "Procházka",
-      "url": "./#/prochazky?q=toggle",
+      "url": "./#/prochazky?q=start",
       "icons": [
         {
           "src": "icons/c/icon-192.png",

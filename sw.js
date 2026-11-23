@@ -1,7 +1,7 @@
 /* sw.js – service worker: aplikace funguje offline.
    Strategie: stejný původ = „cache first + obnova na pozadí“, vše ostatní (mapové dlaždice,
    routing, Firebase) jde přímo na síť. Při změně souborů ZVYŠ VERSION, ať si zařízení stáhnou novou verzi. */
-const VERSION = 'v12';
+const VERSION = 'v13';
 const CACHE = `cipisek-${VERSION}`;
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest',
