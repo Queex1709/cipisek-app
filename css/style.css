@@ -728,4 +728,5 @@ html, body { overflow-x: clip; }
 :root[data-compat] .sheet.lb { height: 100vh; }
 :root[data-compat] .rv { opacity: 1; transform: none; }
 :root[data-compat] #view.enter, :root[data-compat] #view.enter-soft { animation: none; }
-:root[data-compat] html, :root[data-compat] body { overflow-x: hidden; }
+:root[data-compat], :root[data-compat] body { overflow-x: visible; overflow-y: auto; height: auto; touch-action: pan-y pinch-zoom; }
+:root[data-compat] body:not(.noscroll) { overflow-y: visible; }

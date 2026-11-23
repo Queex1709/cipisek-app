@@ -7,3 +7,8 @@ export function applyCompat(s) {
   r.style.setProperty('--cx-t', `${s.compatTop ?? 30}px`);
   r.style.setProperty('--cx-b', `${s.compatBottom ?? 48}px`);
 }
+
+/* pojistka: kdyby zůstal zamčený posun stránky po zavřeném okně, při dotyku se odemkne */
+addEventListener('touchstart', () => {
+  if (document.body.classList.contains('noscroll') && !document.querySelector('.sheet-back')) document.body.classList.remove('noscroll');
+}, { passive: true });
