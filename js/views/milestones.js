@@ -7,6 +7,7 @@ import { icon, toast, openSheet, confirmDialog, field, textarea, readForm } from
 import { MILESTONE_PRESETS } from '../data.js';
 import { photoPickHtml, bindPhotoPick } from '../photopick.js';
 import { ageImage, shareOrDownload } from '../shareimg.js';
+import { openLightbox } from '../lightbox.js';
 
 export function renderHtml() {
   const meta = store.getMeta();
@@ -16,7 +17,7 @@ export function renderHtml() {
   return html`
     <button class="btn primary block" data-mile-add>${icon('plus', 20)} Přidat milník</button>
     ${list.length ? html`<ol class="miles">${list.map((m) => html`<li><button class="mile" data-mile="${m.id}">
-        ${m.hasPhoto ? html`<img data-ph="${m.id}" alt="">` : html`<span class="mile-ic" aria-hidden="true">${icon('star', 22)}</span>`}
+        ${m.hasPhoto ? html`<img class="zoomable" data-ph="${m.id}" alt="Fotka: ${m.title}">` : html`<span class="mile-ic" aria-hidden="true">${icon('star', 22)}</span>`}
         <span class="mile-t"><b>${m.title}</b><small>${fmtDate(m.date)} · ${ageText(meta.birthDate, m.date)}</small>${m.note ? html`<small class="note">${m.note}</small>` : ''}</span>
       </button></li>`)}</ol>`
       : html`<p class="empty">Tady si schováš první zážitky. Klepni na některý a doplň datum.</p>`}
@@ -24,9 +25,17 @@ export function renderHtml() {
       <div class="chips wrap">${free.slice(0, 8).map((p) => html`<button class="chip btn-chip" data-mile-preset="${p}">${p}</button>`)}</div>` : ''}`;
 }
 
+const lbItem = (m) => ({ id: m.id, title: m.title, sub: `${fmtDate(m.date)} · ${ageText(store.getMeta().birthDate, m.date)}`, note: m.note });
+const sortedMiles = () => store.list('milestones').sort((a, b) => b.date.localeCompare(a.date) || b.createdAt - a.createdAt);
+
 export function handleClick(e, redraw) {
   const t = e.target;
   let el;
+  if ((el = t.closest('.mile img[data-ph]'))) {
+    const withPhoto = sortedMiles().filter((m) => m.hasPhoto);
+    openLightbox(withPhoto.map(lbItem), Math.max(0, withPhoto.findIndex((m) => m.id === el.dataset.ph)));
+    return true;
+  }
   if (t.closest('[data-mile-add]')) { sheet(null, '', redraw); return true; }
   if ((el = t.closest('[data-mile-preset]'))) { sheet(null, el.dataset.milePreset, redraw); return true; }
   if ((el = t.closest('[data-mile]'))) { sheet(store.get('milestones', el.dataset.mile), '', redraw); return true; }
@@ -52,7 +61,7 @@ function sheet(existing, presetTitle, redraw) {
   });
   const form = s.$('#mf');
   const pick = bindPhotoPick(s);
-  if (existing?.hasPhoto) photodb.photoUrl(existing.id, 'img').then((u) => { const i = s.$('#ppImg'); if (u && i) i.src = u; });
+  if (existing?.hasPhoto) photodb.photoUrl(existing.id, 'img').then((u) => { const i = s.$('#ppImg'); if (u && i) { i.src = u; i.classList.add('zoomable'); i.onclick = () => { if (!pick.pending) openLightbox([lbItem(existing)]); }; } });
   form.date.onchange = () => { s.$('#mAge').textContent = 'Věk: ' + ageText(meta.birthDate, form.date.value || todayISO()); };
 
   form.onsubmit = async (e) => {

@@ -11,6 +11,7 @@ import { REF_WEIGHT } from '../data.js';
 import { addMonthsISO, ageDisplay } from '../util.js';
 import * as milestones from './milestones.js';
 import * as days from './days.js';
+import { openLightbox } from '../lightbox.js';
 import { ageImage, shareOrDownload } from '../shareimg.js';
 
 let root = null;
@@ -228,7 +229,7 @@ function detailSheet(id) {
     photodb.photoUrl(id, 'img').then((u) => {
       const i = s.$('#dImg');
       if (!i) return;
-      if (u) i.src = u;
+      if (u) { i.src = u; i.classList.add('zoomable'); i.onclick = () => openLightbox([{ id, title: fmtDate(g.date), sub: `${ageText(meta.birthDate, g.date)}${g.weightKg ? ' · ' + fmtKg(g.weightKg) : ''}`, note: g.note }]); }
       else { i.replaceWith(Object.assign(document.createElement('p'), { className: 'empty', textContent: 'Fotka se do tohoto zařízení ještě nestáhla.' })); sync.ensurePhoto(id); }
     });
   }

@@ -6,6 +6,7 @@ import * as sync from '../sync.js';
 import * as photodb from '../photodb.js';
 import { logsOf } from '../domain.js';
 import { html, uid, todayISO, fmtDate, ageText } from '../util.js';
+import { openLightbox } from '../lightbox.js';
 import { icon, toast, openSheet, confirmDialog, field, textarea, readForm } from '../ui.js';
 
 const MAX_PHOTOS = 6;
@@ -64,7 +65,7 @@ function dayCard(d, meta) {
   const row = (emoji, label, text) => (text ? html`<p class="drow"><span class="e" aria-hidden="true">${emoji}</span><span><b>${label}</b> ${text}</span></p>` : '');
   return html`<li><button class="day" data-day-open="${d.date}">
     <span class="day-h"><b>${fmtDate(d.date)}</b><small>${ageText(meta.birthDate, d.date)}</small></span>
-    ${ph.length ? html`<span class="day-ph">${ph.slice(0, 3).map((id) => html`<img data-ph="${id}" alt="">`)}${ph.length > 3 ? html`<i>+${ph.length - 3}</i>` : ''}</span>` : ''}
+    ${ph.length ? html`<span class="day-ph">${ph.slice(0, 3).map((id) => html`<img class="zoomable" data-ph="${id}" data-day="${d.date}" alt="Fotka ze dne ${fmtDate(d.date)}">`)}${ph.length > 3 ? html`<i>+${ph.length - 3}</i>` : ''}</span>` : ''}
     ${row('🆕', 'Začali jsme', d.started)}
     ${row('🎓', 'Naučil se', d.learned)}
     ${row('👍', 'Povedlo se', d.good)}
@@ -77,6 +78,13 @@ function dayCard(d, meta) {
 export function handleClick(e, redraw) {
   const t = e.target;
   let el;
+  if ((el = t.closest('img[data-day]'))) {
+    const d = store.get('days', dayId(el.dataset.day));
+    const meta = store.getMeta();
+    const ids = photosOf(d);
+    openLightbox(ids.map((id) => ({ id, title: fmtDate(d.date), sub: ageText(meta.birthDate, d.date), note: d.note })), Math.max(0, ids.indexOf(el.dataset.ph)));
+    return true;
+  }
   if ((el = t.closest('[data-day-open]'))) { openDay(el.dataset.dayOpen, redraw); return true; }
   if (t.closest('[data-day-other]')) { pickDay(redraw); return true; }
   return false;
@@ -150,8 +158,9 @@ export function openDay(date, redraw) {
       wrap.className = 'dph';
       const img = document.createElement('img');
       img.alt = '';
-      if (added.has(pid)) { const u = URL.createObjectURL(added.get(pid).img); urls.push(u); img.src = u; }
-      else { const u = await photodb.photoUrl(pid, 'thumb'); if (u) img.src = u; else sync.ensurePhoto(pid); }
+      if (added.has(pid)) { const u = URL.createObjectURL(added.get(pid).img); urls.push(u); img.src = u; img.onclick = () => openLightbox([{ url: u, title: fmtDate(date), sub: 'Nová fotka' }]); }
+      else { const u = await photodb.photoUrl(pid, 'thumb'); if (u) { img.src = u; img.onclick = () => openLightbox(kept.map((id) => ({ id, title: fmtDate(date), sub: ageText(meta.birthDate, date) })), kept.indexOf(pid)); } else sync.ensurePhoto(pid); }
+      img.classList.add('zoomable');
       const x = document.createElement('button');
       x.type = 'button'; x.className = 'dph-x'; x.setAttribute('aria-label', 'Odebrat fotku'); x.textContent = '×';
       x.onclick = () => {
