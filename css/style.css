@@ -728,3 +728,10 @@ html, body { overflow-x: clip; }
 :root[data-compat] .sheet.lb { height: 100vh; }
 :root[data-compat], :root[data-compat] body { overflow-x: visible; overflow-y: auto; height: auto; touch-action: pan-y pinch-zoom; }
 :root[data-compat] body:not(.noscroll) { overflow-y: visible; }
+
+.wk-nav { display: inline-flex; }
+.wk-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.wk-list li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 9px 0; border-top: 1px solid var(--line); }
+.wk-list li span { flex: 1; color: var(--ink-2); }
+.tr-good { color: var(--good); } .tr-bad { color: var(--bad); }
+.wk-list small { flex-basis: 100%; text-align: right; }

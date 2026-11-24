@@ -10,6 +10,7 @@ import { weightSeries, nextVet } from '../domain.js';
 import { photoUrl } from '../photodb.js';
 import * as cards from '../cards.js';
 import * as days from './days.js';
+import * as week from '../week.js';
 
 let root = null;
 
@@ -112,8 +113,7 @@ function draw() {
     ${cards.pottyCard()}
     ${cards.whereCard()}
 
-    ${weekHasData ? html`<section class="card"><h2>Čistota za týden</h2>${miniBars(weekRows)}
-      <p class="legend"><i class="dot good"></i>venku <i class="dot bad"></i>nehoda doma</p></section>` : ''}
+    ${week.renderHtml()}
 
     <section class="card phase">
       <div class="phase-head"><span class="phase-e" aria-hidden="true">${phase.emoji}</span><div><h2>${phase.title}</h2><p class="muted">${phase.lead}</p></div></div>
@@ -153,6 +153,7 @@ async function setAvatar() {
 function onClick(e) {
   if (cards.handleClick(e, draw)) return;
   if (days.handleClick(e, draw)) return;
+  if (week.handleClick(e, draw)) return;
   const q = e.target.closest('[data-q]');
   if (q) return quickLog(q.dataset.q);
   const ev = e.target.closest('[data-ev]');

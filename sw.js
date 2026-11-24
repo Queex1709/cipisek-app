@@ -1,14 +1,14 @@
 /* sw.js – service worker: aplikace funguje offline.
    Strategie: stejný původ = „cache first + obnova na pozadí“, vše ostatní (mapové dlaždice,
    routing, Firebase) jde přímo na síť. Při změně souborů ZVYŠ VERSION, ať si zařízení stáhnou novou verzi. */
-const VERSION = 'v24';
+const VERSION = 'v25';
 const CACHE = `cipisek-${VERSION}`;
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest',
   'css/style.css', 'css/fonts.css', 'fonts/bricolage-latin.woff2', 'fonts/bricolage-latin-ext.woff2',
   'js/app.js', 'js/util.js', 'js/store.js', 'js/photodb.js', 'js/domain.js', 'js/ui.js',
   'js/data.js', 'js/tracker.js', 'js/sync.js', 'js/tasks.js', 'js/feeding.js', 'js/insights.js',
-  'js/help.js', 'js/lightbox.js', 'js/update.js', 'js/accent.js', 'js/compat.js', 'js/weather.js', 'js/aid.js', 'js/deals.js', 'js/cards.js', 'js/vetcard.js', 'js/photopick.js', 'js/shareimg.js',
+  'js/help.js', 'js/lightbox.js', 'js/update.js', 'js/accent.js', 'js/compat.js', 'js/week.js', 'js/weather.js', 'js/aid.js', 'js/deals.js', 'js/cards.js', 'js/vetcard.js', 'js/photopick.js', 'js/shareimg.js',
   'js/views/today.js', 'js/views/walks.js', 'js/views/training.js',
   'js/views/growth.js', 'js/views/health.js', 'js/views/settings.js',
   'js/views/feedtab.js', 'js/views/aidtab.js', 'js/views/food.js', 'js/views/milestones.js',
